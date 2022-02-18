@@ -118,7 +118,7 @@ class AlchemyQuery:
 
 
 class MyLabel(Label):
-    """Subclass for py usage. Subclass linked to kv file."""
+    """For adding a dynamic amount of labels."""
     pass
 
 
@@ -130,8 +130,8 @@ class ResultsTabPanel(TabbedPanel):
     third_effect_panel = ObjectProperty(None)
     fourth_effect_panel = ObjectProperty(None)
 
-    def __init__(self, *args, **kwargs):
-        super(ResultsTabPanel, self).__init__(*args, **kwargs)
+    def __init__(self, **kwargs):
+        super(ResultsTabPanel, self).__init__(**kwargs)
 
     def add_to_details_panel(self, details):
         """Updates ingredient_details_panel
@@ -261,6 +261,10 @@ class ResultsTabPanel(TabbedPanel):
             tab.text = names[x]
 
 
+class PossibleResultsBox(GridLayout):
+    """Outputs the possible results inside a scroll view box."""
+
+
 class SearchBar(GridLayout):
     """A searchbar for the application."""
     search_text_input = ObjectProperty(None)
@@ -294,37 +298,45 @@ class SearchBar(GridLayout):
             self.parent.results_panel.add_to_effects_panel(panels[x], items)
 
 
-class RootBackground(GridLayout):
-    """The root widget of the application."""
-    results_panel = ObjectProperty(None)
-    search_bar = ObjectProperty(None)
+# class FrontWidget(GridLayout):
+#     """The root widget of the application."""
+#     pass
 
-    def __init__(self, *args, **kwargs):
-        super(RootBackground, self).__init__(*args, **kwargs)
 
-        # Explicit update of tab_width. Required to fix tab buttons placement.
-        Clock.schedule_once(self.results_panel.on_tab_width, 0.1)
-
-        # Sets default values to tabs and panels.
-        self.results_panel.reset_panels()
-
-        # Explicit update of ingredients panel 4th line parameters.
-        self.results_panel.ingredient_details_panel.line4.name.halign \
-        = 'left'
-        self.results_panel.ingredient_details_panel.line4.value.halign \
-        = 'left'
+# class RootWidget(Widget):
+#     """The root widget of the application."""
+#     pass
 
 
 class AlchemyIngredients(App):
     """Main application."""
-
-    def build(self):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         # Window.size = (720, 1520)  # 16:9 screen ratio
 
-        # Main widget tree.
-        Builder.load_file('main_widget_tree.kv')
-        main = RootBackground()
-        return main
+        self._init_widget_tree()
+
+    def _init_widget_tree(self):
+        """Loads and initializes the main widget tree and its presets."""
+        self.main = Builder.load_file('main_widget_tree.kv')
+        print(self.main.front_widget.ids)
+
+        # Explicit update of tab_width. Required to fix tab buttons placement.
+        Clock.schedule_once(
+            self.main.front_widget.results_panel.on_tab_width, 0.1
+            )
+
+        # Sets default values to tabs and panels.
+        self.main.front_widget.results_panel.reset_panels()
+
+        # Explicit update of ingredients panel 4th line parameters.
+        self.main.front_widget.results_panel.ingredient_details_panel.line4.\
+        name.halign = 'left'
+        self.main.front_widget.results_panel.ingredient_details_panel.line4.\
+        value.halign = 'left'
+
+    def build(self):
+        return self.main
 
 
 if __name__ == '__main__':

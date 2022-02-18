@@ -199,19 +199,22 @@
         on_release: root.search()
 
 
-<RootBackground>:
+<FrontWidget@GridLayout>:
+    size_hint: None, None
+    size: self.parent.size
     cols: 1
 
     results_panel: results_panel
-    serach_bar: search_bar
+    search_bar: search_bar
 
     Label:
-        text: "[b]Skyrim Alchemy\nIngredients Library[/b]"
+        text: "[b]Skyrim Alchemy\nIngredients Booklet[/b]"
         markup: True
-        halign: 'center'
-        valign: 'center'
+        padding: dp(0), dp(20)
         size_hint: 1, None
-        height: dp(60)
+        height: self.texture_size[1]
+        text_size: self.size[0], None
+        halign: 'center'
 
     SearchBar:
         id: search_bar
@@ -221,3 +224,12 @@
     ResultsTabPanel:
         id: results_panel
 
+
+<RootWidget@Widget>:
+    front_widget: front_widget
+
+    FrontWidget:
+        id: front_widget
+
+
+RootWidget:
