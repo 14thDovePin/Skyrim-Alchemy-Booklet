@@ -335,6 +335,20 @@ class AlchemyIngredients(App):
         self.main.front_widget.results_panel.ingredient_details_panel.line4.\
         value.halign = 'left'
 
+        # Updates and presets for suggestion box.
+        Clock.schedule_interval(
+            lambda dt: self._suggestion_box_update(), 1/60
+            )
+
+    def _suggestion_box_update(self):
+        """Constantly updates the width and pos of the suggestion
+        box to best match with the search text input box."""
+        self.main.suggestions_box.width = \
+        self.main.front_widget.search_bar.search_text_input.width
+        self.main.suggestions_box.top = \
+        self.main.front_widget.search_bar.search_text_input.y
+
+
     def build(self):
         return self.main
 
