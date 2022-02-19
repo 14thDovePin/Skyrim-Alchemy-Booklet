@@ -231,33 +231,46 @@
     text_size: self.size
     padding: dp(5), dp(0)
     markup: True
+    on_release: self.parent.parent.parent.front_widget.search_bar.suggestion_search(self.text)  # root.front_widget.search_bar.search_text_input.text
+
+
+<SuggestionBox@ScrollView>:
+    suggestions_box: suggestions_box
+
+    GridLayout:
+        id: suggestions_box
+        cols: 1
+        size_hint_y: None
+        height: self.minimum_height
+
+        canvas:
+
+            Color:
+                rgb: 0/255, 68/255, 102/255
+
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+
+<Menu@Button>:
+    text: "Menu"
+    padding: dp(5), dp(5)
+    size: self.texture_size
 
 
 <RootWidget@Widget>:
     front_widget: front_widget
     scrollview_suggestions_box: scrollview_suggestions_box
-    suggestions_box: suggestions_box
+    menu: menu
 
     FrontWidget:
         id: front_widget
 
-    ScrollView
+    SuggestionBox:
         id: scrollview_suggestions_box
 
-        GridLayout:
-            id: suggestions_box
-            cols: 1
-            size_hint_y: None
-            height: self.minimum_height
-
-            canvas:
-
-                Color:
-                    rgb: 0/255, 68/255, 102/255
-
-                Rectangle:
-                    pos: self.pos
-                    size: self.size
-
+    Menu:
+        id: menu
 
 RootWidget:

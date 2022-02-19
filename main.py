@@ -288,8 +288,10 @@ class SearchBar(GridLayout):
         self.retain_query = ''
 
     def search(self):
+        """Initiates search and displays updates GUI data."""
         self.allib.search(self.search_text_input.text)
-        self.parent.parent.suggestions_box.clear_widgets()
+        self.parent.parent.scrollview_suggestions_box.\
+        suggestions_box.clear_widgets()
 
         if not type(self.allib.main_key) == type(None):
             self.parent.results_panel.add_to_details_panel\
@@ -305,14 +307,39 @@ class SearchBar(GridLayout):
         """Updates items in suggestion box."""
         if self.search_text_input.text != self.retain_query:
             self.retain_query = self.search_text_input.text
-            self.parent.parent.suggestions_box.clear_widgets()
+            self.parent.parent.scrollview_suggestions_box.suggestions_box.clear_widgets()
             items = self.allib.search_suggestions(self.search_text_input.text)
-            for i in items:
-                self.parent.parent.suggestions_box.add_widget(
-                SearchBoxButton(
-                    text = i
+            for x, i in enumerate(items):
+                if x%2 == 0:
+                    self.parent.parent.scrollview_suggestions_box.suggestions_box.add_widget(
+                    SearchBoxButton(
+                        text = '[color=#AF9BDB][b]'+i+'[/color][/b]'
+                        )
                     )
-                )
+                else:
+                    self.parent.parent.scrollview_suggestions_box.suggestions_box.add_widget(
+                    SearchBoxButton(
+                        text = '[color=#FFEADD][b]'+i+'[/color][/b]'
+                        )
+                    )
+
+    def suggestion_search(self, input_text):
+        """Callback function to autosearch clicked suggested results."""
+        # Filter input_text from markup.
+        input_text = [i for i in input_text]
+        for x, i in enumerate(input_text[:]):
+            if i == '[':
+                remove = True
+            if remove:
+                input_text.pop(x)
+                input_text.insert(x, '')
+            if i == ']':
+                remove = False
+        input_text = ''.join(input_text)
+
+        self.retain_query = input_text
+        self.search_text_input.text = input_text
+        self.search()
 
     def _add_effects(self, effects):
         """Adds ingredients to the four panels."""
@@ -353,35 +380,38 @@ class AlchemyIngredients(App):
         self.main.front_widget.results_panel.ingredient_details_panel.line4.\
         value.halign = 'left'
 
-        # Updates and presets for suggestion box.
+        # Cnostant Updates.
         Clock.schedule_interval(
-            lambda dt: self._suggestion_box_update(), 1/60  # 60 fps.
+            lambda dt: self._constant_updates(), 1/60  # 60 fps.
             )
 
-    def _suggestion_box_update(self):
-        """Constantly updates the suggestion box to
-        best match with the search text input box."""
+    def _constant_updates(self):
+        """Code block that is constantly updated 60 frames per second."""
 
-        # Width update.
+        # Scrollview suggestion box width update.
         self.main.scrollview_suggestions_box.width = \
         self.main.front_widget.search_bar.search_text_input.width
 
-        # Height update.
+        # Scrollview suggestion box height update.
         set_height = self.main.height - abs(self.main.height - \
         self.main.front_widget.search_bar.search_text_input.y)
-        min_height = self.main.suggestions_box.minimum_height
+        min_height = self.main.scrollview_suggestions_box.suggestions_box.minimum_height
 
         if  min_height < set_height:
             self.main.scrollview_suggestions_box.height = min_height
         else:
             self.main.scrollview_suggestions_box.height = set_height
 
-        # Position update.
+        # Scrollview suggestion box position update.
         self.main.scrollview_suggestions_box.top = \
         self.main.front_widget.search_bar.search_text_input.y
 
-        # Suggestion update.
+        # Suggestions update.
         self.main.front_widget.search_bar.update_suggestions()
+
+        # Menu button position update.
+        self.main.menu.top = self.main.top
+        self.main.menu.right =  self.main.right
 
     def build(self):
         return self.main
