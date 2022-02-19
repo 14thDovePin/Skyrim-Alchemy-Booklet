@@ -9,6 +9,7 @@ from kivy.lang import Builder
 from kivy.properties import (
     ObjectProperty,
     )
+from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
 from kivy.uix.tabbedpanel import TabbedPanel
@@ -55,12 +56,21 @@ class AlchemyQuery:
                 primary, secondary, tertiary, quaternary]
                 )
 
+        self.word_pool = [i[0] for i in self.data_pool]
+
+    def search_suggestions(self, qeury_text):
+        """Returns possible search suggestions."""
+        items = []
+        qtext = qeury_text.lower().replace(' ', '')
+        if qtext:
+            for item in self.word_pool:
+                if qtext in item.lower().replace(' ', ''):
+                    items.append(item)
+        return items
 
     def search(self, qeury_text):
         """Sets the key to be used to pull data."""
-        word_pool = [i[0] for i in self.data_pool]
-
-        for x, item in enumerate(word_pool):
+        for x, item in enumerate(self.word_pool):
             if qeury_text.lower().replace(' ', '') == \
             item.lower().replace(' ', ''):
                 self.main_key = x
@@ -261,19 +271,25 @@ class ResultsTabPanel(TabbedPanel):
             tab.text = names[x]
 
 
-class PossibleResultsBox(GridLayout):
-    """Outputs the possible results inside a scroll view box."""
+class SearchBoxButton(Button):
+    """For adding a dynamic number of buttons."""
+    pass
 
 
 class SearchBar(GridLayout):
     """A searchbar for the application."""
     search_text_input = ObjectProperty(None)
 
-    # Main library to process search query.
-    allib = AlchemyQuery()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        # Main library to process search query.
+        self.allib = AlchemyQuery()
+        # Prevents suggestion box from updating when not needed.
+        self.retain_query = ''
 
     def search(self):
         self.allib.search(self.search_text_input.text)
+        self.parent.parent.suggestions_box.clear_widgets()
 
         if not type(self.allib.main_key) == type(None):
             self.parent.results_panel.add_to_details_panel\
@@ -284,6 +300,19 @@ class SearchBar(GridLayout):
 
         else:
             self.parent.results_panel.reset_panels()
+
+    def update_suggestions(self):
+        """Updates items in suggestion box."""
+        if self.search_text_input.text != self.retain_query:
+            self.retain_query = self.search_text_input.text
+            self.parent.parent.suggestions_box.clear_widgets()
+            items = self.allib.search_suggestions(self.search_text_input.text)
+            for i in items:
+                self.parent.parent.suggestions_box.add_widget(
+                SearchBoxButton(
+                    text = i
+                    )
+                )
 
     def _add_effects(self, effects):
         """Adds ingredients to the four panels."""
@@ -298,16 +327,6 @@ class SearchBar(GridLayout):
             self.parent.results_panel.add_to_effects_panel(panels[x], items)
 
 
-# class FrontWidget(GridLayout):
-#     """The root widget of the application."""
-#     pass
-
-
-# class RootWidget(Widget):
-#     """The root widget of the application."""
-#     pass
-
-
 class AlchemyIngredients(App):
     """Main application."""
     def __init__(self, **kwargs):
@@ -319,7 +338,6 @@ class AlchemyIngredients(App):
     def _init_widget_tree(self):
         """Loads and initializes the main widget tree and its presets."""
         self.main = Builder.load_file('main_widget_tree.kv')
-        print(self.main.front_widget.ids)
 
         # Explicit update of tab_width. Required to fix tab buttons placement.
         Clock.schedule_once(
@@ -337,17 +355,33 @@ class AlchemyIngredients(App):
 
         # Updates and presets for suggestion box.
         Clock.schedule_interval(
-            lambda dt: self._suggestion_box_update(), 1/60
+            lambda dt: self._suggestion_box_update(), 1/60  # 60 fps.
             )
 
     def _suggestion_box_update(self):
-        """Constantly updates the width and pos of the suggestion
-        box to best match with the search text input box."""
-        self.main.suggestions_box.width = \
+        """Constantly updates the suggestion box to
+        best match with the search text input box."""
+
+        # Width update.
+        self.main.scrollview_suggestions_box.width = \
         self.main.front_widget.search_bar.search_text_input.width
-        self.main.suggestions_box.top = \
+
+        # Height update.
+        set_height = self.main.height - abs(self.main.height - \
+        self.main.front_widget.search_bar.search_text_input.y)
+        min_height = self.main.suggestions_box.minimum_height
+
+        if  min_height < set_height:
+            self.main.scrollview_suggestions_box.height = min_height
+        else:
+            self.main.scrollview_suggestions_box.height = set_height
+
+        # Position update.
+        self.main.scrollview_suggestions_box.top = \
         self.main.front_widget.search_bar.search_text_input.y
 
+        # Suggestion update.
+        self.main.front_widget.search_bar.update_suggestions()
 
     def build(self):
         return self.main

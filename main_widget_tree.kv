@@ -7,7 +7,7 @@
     markup: True
 
     # The following lines are for the effects_panel.
-    size_hing: 1, None
+    size_hint: 1, None
     text_size: self.size
     halign: 'left'
 
@@ -225,16 +225,39 @@
         id: results_panel
 
 
+<SearchBoxButton@Button>:
+    size_hint: 1, None
+    size: self.texture_size
+    text_size: self.size
+    padding: dp(5), dp(0)
+    markup: True
+
+
 <RootWidget@Widget>:
     front_widget: front_widget
+    scrollview_suggestions_box: scrollview_suggestions_box
     suggestions_box: suggestions_box
 
     FrontWidget:
         id: front_widget
 
-    Button:  # Change to GridLayout...
-        id: suggestions_box
-        text: "SearchBox"
+    ScrollView
+        id: scrollview_suggestions_box
+
+        GridLayout:
+            id: suggestions_box
+            cols: 1
+            size_hint_y: None
+            height: self.minimum_height
+
+            canvas:
+
+                Color:
+                    rgb: 0/255, 68/255, 102/255
+
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
 
 
 RootWidget:
