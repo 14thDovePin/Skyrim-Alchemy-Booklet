@@ -1,0 +1,64 @@
+# Widgets here are templates, dynamic widgets, and preset widgets.
+
+
+<MyLabel@Label>:  # Predefined Label class.
+    size_hint: 1, None
+    size: self.texture_size
+    text_size: self.size
+    halign: 'left'
+    padding: dp(5), dp(0)
+    markup: True
+
+
+# Preset class for "<ResultsTabPanel>" in "widget_front.kv".
+<MyGrid@GridLayout>:
+    size_hint_y: None
+    height: self.minimum_height
+    row_default_height: dp(20)
+    cols: 1
+
+
+# FR: 0002
+<CustomWidthTab@TabbedPanelItem>:  # Class for tabpanel with dynamic tab width.
+    width: self.texture_size[0]
+    padding: dp(5), dp(2)
+    size_hint_x: None
+    markup: True
+
+
+# Set the orientation of the NVP by either using:
+#    "rows: 1" Sets the orientation horizontally.
+#    "cols: 1" Sets the orientation vertically.
+# Note failure to use either one will result in the widget not being triggerd!
+
+<NVP@GridLayout>:  # Name Value Pairs.
+    size_hint: 1, None
+    height: self.minimum_height
+
+    name: name
+    value: value
+
+    MyLabel:
+        id: name
+        size_hint:  1 if self.parent.cols == 1 else None, None if self.parent.cols == 1 else 1
+        text: "Item_Name:"
+        text_size: None, self.height
+        halign: 'center' if self.parent.cols == 1 else 'left'
+
+    MyLabel:
+        id: value
+        size_hint: 1, None
+        text: "[Item description and/or other related information.]"
+        text_size: self.width, None
+        halign: 'center' if self.parent.cols == 1 else 'left'
+
+
+<SearchBoxButton@Button>:
+    size_hint: 1, None
+    size: self.texture_size
+    text_size: self.size
+    background_color: 0, 0, 0, 0
+    background_down: ''
+    background_normal: ''
+    padding: dp(5), dp(0)
+    markup: True

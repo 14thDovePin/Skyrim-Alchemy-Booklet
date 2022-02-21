@@ -1,0 +1,46 @@
+#:kivy 2.0.0
+#:include widget_front.kv
+
+
+RootWidget:
+
+
+<RootWidget@Widget>:
+    front_widget: front_widget
+    menu: menu
+    scrollview_suggestions_box: scrollview_suggestions_box
+
+    FrontWidget:
+        id: front_widget
+
+    Menu:
+        id: menu
+
+    SuggestionBox:
+        id: scrollview_suggestions_box
+
+
+<Menu@Button>:
+    text: "Menu"
+    padding: dp(5), dp(5)
+    size: self.texture_size
+
+
+<SuggestionBox@ScrollView>:
+    suggestions_box: suggestions_box
+
+    GridLayout:
+        id: suggestions_box
+        cols: 1
+        size_hint_y: None
+        height: self.minimum_height
+
+        canvas:
+
+            Color:
+                rgba: 0/255, 33/255, 51/255, 1
+                #rgb: 0/255, 68/255, 102/255
+
+            Rectangle:
+                pos: self.pos
+                size: self.size

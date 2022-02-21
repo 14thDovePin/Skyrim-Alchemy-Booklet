@@ -1,0 +1,164 @@
+#:include widget_temp.kv
+
+
+<FrontWidget@GridLayout>:
+    size_hint: None, None
+    size: self.parent.size
+    cols: 1
+
+    results_panel: results_panel
+    search_bar: search_bar
+
+    Label:
+        text: "[b]Skyrim Alchemy\nIngredients Booklet[/b]"
+        markup: True
+        padding: dp(0), dp(20)
+        size_hint: 1, None
+        height: self.texture_size[1]
+        text_size: self.size[0], None
+        halign: 'center'
+
+    SearchBar:
+        id: search_bar
+        size_hint: 1, None
+        height: dp(30)
+
+    ResultsTabPanel:
+        id: results_panel
+
+
+<SearchBar>:
+    rows: 1
+
+    search_text_input: search_text_input
+
+    # Add relative overlay for predictive word?
+    TextInput:
+        id: search_text_input
+        size_hint: 0.7, 1
+        hint_text: "Ingredient Name.."
+        multiline: False
+        focus: True
+        on_text_validate: root.search()
+
+    Button:
+        size_hint: 0.3, 1
+        text: "[b]Search[/b]"
+        markup: True
+        on_release: root.search()
+
+
+<ResultsTabPanel>:
+    do_default_tab: False
+    tab_width: None
+
+    home_tab: home_tab
+    ingredient_details_panel: ingredient_details_panel
+    first_effect_panel: first_effect_panel
+    second_effect_panel: second_effect_panel
+    third_effect_panel: third_effect_panel
+    fourth_effect_panel: fourth_effect_panel
+    
+    CustomWidthTab:
+        text: "[b]Ingredient\nDescription[/b]"
+        id: home_tab
+
+        ScrollView:
+            do_scroll_x: False
+
+            IngredientDetailsTab:
+                id: ingredient_details_panel
+
+    CustomWidthTab:
+        id: first_effect_tab
+
+        ScrollView:
+            do_scroll_x: False
+
+            MyGrid:
+                id: first_effect_panel
+
+    CustomWidthTab:
+        id: second_effect_tab
+
+        ScrollView:
+            do_scroll_x: False
+
+            MyGrid:
+                id: second_effect_panel
+
+    CustomWidthTab:
+        id: third_effect_tab
+
+        ScrollView:
+            do_scroll_x: False
+
+            MyGrid:
+                id: third_effect_panel
+
+    CustomWidthTab:
+        id: fourth_effect_tab
+
+        ScrollView:
+            do_scroll_x: False
+
+            MyGrid:
+                id: fourth_effect_panel
+
+
+<IngredientDetailsTab@GridLayout>:
+    size_hint_y: None
+    height: self.minimum_height
+    cols: 1
+
+    line1: line1
+    line2: line2
+    line3: line3
+    effects: effects
+    line4: line4
+
+    NVP:
+        id: line1
+        rows: 1
+
+    NVP:
+        id: line2
+        rows: 1
+
+    NVP:
+        id: line3
+        rows: 1
+
+    EffectsPanel:
+        id: effects
+
+    NVP:
+        id: line4
+        cols: 1
+
+
+<EffectsPanel@GridLayout>:
+    cols: 2
+    size_hint: 1, None
+    height: self.minimum_height
+
+    first: first
+    second: second
+    third: third
+    fourth: fourth
+
+    NVP:
+        id: first
+        cols: 1
+
+    NVP:
+        id: second
+        cols: 1
+
+    NVP:
+        id: third
+        cols: 1
+
+    NVP:
+        id: fourth
+        cols: 1
