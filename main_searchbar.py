@@ -48,6 +48,7 @@ class SearchBar(GridLayout):
                     self.parent.parent.scrollview_suggestions_box.suggestions_box.add_widget(
                     SearchBoxButton(
                         text = '[color=#AF9BDB][b]'+i+'[/color][/b]',
+                        background_color = (62/255, 62/255, 40/255, 1),
                         on_release = lambda ins: self.suggestion_search(ins.text)  # FR: 0001
                         )
                     )
@@ -55,6 +56,7 @@ class SearchBar(GridLayout):
                     self.parent.parent.scrollview_suggestions_box.suggestions_box.add_widget(
                     SearchBoxButton(
                         text = '[color=#FFEADD][b]'+i+'[/color][/b]',
+                        background_color = (62/255, 62/255, 40/255, 1),
                         on_release = lambda ins: self.suggestion_search(ins.text)
                         )
                     )
