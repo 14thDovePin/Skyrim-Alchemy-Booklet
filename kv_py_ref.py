@@ -2,12 +2,6 @@
 
 
 from kivy.uix.button import Button
-# from kivy.uix.label import Label
-
-
-# class MyLabel(Label):
-#     """For adding a dynamic amount of labels."""
-#     pass
 
 
 class SearchBoxButton(Button):

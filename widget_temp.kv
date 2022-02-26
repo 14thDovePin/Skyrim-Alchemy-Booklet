@@ -26,7 +26,7 @@
         id: name
         size_hint:  1 if self.parent.cols == 1 else None, None if self.parent.cols == 1 else 1
         text: "Item_Name:"
-        text_size: None, self.height
+        text_size: self.width if self.parent.cols == 1 else None, None if self.parent.cols == 1 else self.height
         halign: 'center' if self.parent.cols == 1 else 'left'
 
     MyLabel:
@@ -43,6 +43,7 @@
     height: self.minimum_height
     row_default_height: dp(20)
     cols: 1
+    spacing: dp(0), dp(2)
 
 
 # FR: 0002
@@ -54,7 +55,6 @@
 
 
 <SearchBoxButton@Button>:
-    size_hint: 1, None
     size: self.texture_size
     text_size: self.size
     background_color: 0, 0, 0, 0

@@ -6,6 +6,7 @@ from kivy.clock import Clock
 from kivy.lang import Builder
 
 
+from main_menu import Menu
 from main_resultstabpanel import ResultsTabPanel
 from main_searchbar import SearchBar
 
@@ -35,7 +36,11 @@ class AlchemyBooklet(App):
         self.main.front_widget.results_panel.ingredient_details_panel.line4.\
         value.halign = 'left'
 
-        # Cnostant Updates.
+        # For initial setup of menu drop box width.
+        Clock.schedule_once(lambda dt: self.main.menu.toggle_box_drop(), 1/60)
+        Clock.schedule_once(lambda dt: self.main.menu.toggle_box_drop(), 2/60)
+
+        # Constant Updates.
         Clock.schedule_interval(
             lambda dt: self._constant_updates(), 1/60  # 60 fps.
             )
@@ -68,6 +73,10 @@ class AlchemyBooklet(App):
         # Menu button position update.
         self.main.menu.top = self.main.top
         self.main.menu.right =  self.main.right
+
+        # Menu drop box position update.
+        self.main.scrollview_menu_drop_box.top = self.main.menu.y
+        self.main.scrollview_menu_drop_box.right = self.main.right
 
     def build(self):
         return self.main
