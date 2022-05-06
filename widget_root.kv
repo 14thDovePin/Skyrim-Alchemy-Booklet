@@ -1,4 +1,6 @@
 #:kivy 2.0.0
+#:include widget_aip.kv
+#:include widget_app_info.kv
 #:include widget_front.kv
 #:include widget_temp.kv
 
@@ -8,6 +10,8 @@ RootWidget:
 
 <RootWidget@Widget>:
     front_widget: front_widget
+    aip: aip
+    app_info: app_info
     menu: menu
     scrollview_menu_drop_box: scrollview_menu_drop_box
     scrollview_suggestions_box: scrollview_suggestions_box
@@ -15,55 +19,20 @@ RootWidget:
     FrontWidget:
         id: front_widget
 
+    AIP:
+        id: aip
+
+    AppInfo:
+        id: app_info
+
     Menu:
         id: menu
 
     MenuDropBox:
         id: scrollview_menu_drop_box
 
-
     SuggestionBox:
         id: scrollview_suggestions_box
-
-
-<Menu>:
-    text: "Menu"
-    padding: dp(5), dp(5)
-    size: self.texture_size
-    on_press: self.toggle_box_drop()
-    drop_box: 'shown'  # Valid strings are 'shown' and 'hidden' only.
-
-
-<MenuDropBox>:
-    do_scroll_x: False
-    menu_drop_box: menu_drop_box
-    default_width: 0  # Note! 'main_meny.py' @ line 16
-
-    MyGrid:
-        id: menu_drop_box
-
-        canvas:
-
-            Color:
-                rgba: 0/255, 17/255, 51/255, 1
-
-            Rectangle:
-                pos: self.pos
-                size: self.size
-
-        SearchBoxButton:
-            size_hint: None, 1
-            text_size: None, self.height
-            background_color: 0/255, 34/255, 102/255, 1
-            text: "Add Custom Ingredient"
-            on_press: print('Display and initiate Add Ingredient panel..')
-
-        SearchBoxButton:
-            size_hint: None, 1
-            text_size: None, self.height
-            background_color: 0/255, 34/255, 102/255, 1
-            text: "App Info"
-            on_press: print('Display Application Information panel..')
 
 
 <SuggestionBox@ScrollView>:
@@ -81,3 +50,43 @@ RootWidget:
             Rectangle:
                 pos: self.pos
                 size: self.size
+
+
+<Menu>:
+    text: "Menu"
+    padding: dp(5), dp(5)
+    size: self.texture_size
+    on_press: self.toggle_box_drop()
+    drop_box: 'shown'  # Valid strings are 'shown' and 'hidden' only.
+
+
+<MenuDropBox>:
+    do_scroll_x: False
+    menu_drop_box: menu_drop_box
+    default_width: 0  # Note! 'main_menu.py' @ line 16
+
+    MyGrid:
+        id: menu_drop_box
+
+        canvas:
+
+            Color:
+                rgba: 0/255, 17/255, 51/255, 1
+
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        MenuBoxButton:
+            size_hint: None, 1
+            text_size: None, self.height
+            background_color: 0/255, 34/255, 102/255, 1
+            text: "Add Custom Ingredient"
+            on_press: root.parent.aip.toggle_page()
+
+        MenuBoxButton:
+            size_hint: None, 1
+            text_size: None, self.height
+            background_color: 0/255, 34/255, 102/255, 1
+            text: "App Info"
+            on_press: root.parent.app_info.toggle_page()

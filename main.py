@@ -6,6 +6,9 @@ from kivy.clock import Clock
 from kivy.lang import Builder
 
 
+from main_app_info import AppInfo
+from main_aip import AIP
+from main_front_widget import FrontWidget
 from main_menu import Menu
 from main_resultstabpanel import ResultsTabPanel
 from main_searchbar import SearchBar
@@ -38,7 +41,6 @@ class AlchemyBooklet(App):
 
         # For initial setup of menu drop box width.
         Clock.schedule_once(lambda dt: self.main.menu.toggle_box_drop(), 1/60)
-        Clock.schedule_once(lambda dt: self.main.menu.toggle_box_drop(), 2/60)
 
         # Constant Updates.
         Clock.schedule_interval(
@@ -77,6 +79,40 @@ class AlchemyBooklet(App):
         # Menu drop box position update.
         self.main.scrollview_menu_drop_box.top = self.main.menu.y
         self.main.scrollview_menu_drop_box.right = self.main.right
+
+        # App info size & position update.
+        self.main.app_info.top = self.main.top
+        self.main.app_info.x = self.main.x
+        self.main.app_info.width = self.main.width
+        # referece "main_app_info.py" @ line 15-28.
+        if self.main.app_info.page_state == 'hidden':
+            self.main.app_info.height = self.main.height
+
+        # AIP size & position update.
+        self.main.aip.top = self.main.top
+        self.main.aip.x = self.main.x
+        self.main.aip.width = self.main.width
+        # referece "main_aip.py" @ line 15-28.
+        if self.main.aip.page_state == 'hidden':
+            self.main.aip.height = self.main.height
+
+        # Front_Widget height update.
+        # referece "main_front_widget.py" @ line 15-28.
+        if self.main.front_widget.page_state == 'hidden':
+            self.main.front_widget.height = self.main.height
+
+        # Show front_widget if every other page is hidden.
+        pages = [i for i in self.main.children]
+        pages.remove(self.main.front_widget)
+        pages_state = []
+        for i in pages:
+            if hasattr(i, "page_state"):
+                if i.page_state == "shown":
+                    pages_state.append(True)
+                else:
+                    pages_state.append(False)
+        if all(pages_state):
+            self.main.front_widget.page_state = 'hidden'
 
     def build(self):
         return self.main

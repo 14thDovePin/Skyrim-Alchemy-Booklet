@@ -12,7 +12,7 @@ class Menu(Button):
     def toggle_box_drop(self):
         """Toggles the menu drop box by changing it's size_x to 0 and back."""
 
-        # Sets the default with if not setup.
+        # Sets the default width if not setup.
         # Note code block is a crude solution!
         if self.parent.scrollview_menu_drop_box.default_width == 0:
             children = [i for i in \
@@ -24,6 +24,7 @@ class Menu(Button):
                 i.size = i.texture_size
                 i.text_size = i.size
             self.parent.scrollview_menu_drop_box.default_width = 1  # Lock.
+            self.toggle_box_drop()
 
         # Sets the correct height.
         if self.drop_box == 'shown':

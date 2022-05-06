@@ -1,10 +1,11 @@
 #:include widget_temp.kv
 
 
-<FrontWidget@GridLayout>:
+<FrontWidget>:
     size_hint: None, None
     size: self.parent.size
     cols: 1
+    page_state: "shown"  # Valid strings are 'shown' and 'hidden' only.
 
     results_panel: results_panel
     search_bar: search_bar
