@@ -43,7 +43,7 @@ class ResultsTabPanel(TabbedPanel):
                         text = '[color=#AF9BDB][b]'+ingredient+'[/color][/b]',
                         background_color = (64/255, 64/255, 64/255, 1),
                         on_release = lambda ins: \
-                        self.parent.search_bar.suggestion_search(ins.text)
+                        self.parent.parent.search_bar.suggestion_search(ins.text)
                         )
                     )
             else:
@@ -52,7 +52,7 @@ class ResultsTabPanel(TabbedPanel):
                         text = '[color=#FFEADD][b]'+ingredient+'[/color][/b]',
                         background_color = (64/255, 64/255, 64/255, 1),
                         on_release = lambda ins: \
-                        self.parent.search_bar.suggestion_search(ins.text)
+                        self.parent.parent.search_bar.suggestion_search(ins.text)
                         )
                     )
 

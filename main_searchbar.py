@@ -18,22 +18,22 @@ class SearchBar(GridLayout):
     def search(self):
         """Initiates search and displays updates GUI data."""
         self.allib.search(self.search_text_input.text)
-        self.parent.parent.scrollview_suggestions_box.\
+        self.parent.parent.parent.scrollview_suggestions_box.\
         suggestions_box.clear_widgets()
 
         if not type(self.allib.main_key) == type(None):
-            self.parent.results_panel.add_to_details_panel\
+            self.parent.parent.results_panel.add_to_details_panel\
             (self.allib.details())
-            self.parent.results_panel.update_tab_names(self.allib.tabs())
+            self.parent.parent.results_panel.update_tab_names(self.allib.tabs())
             self._add_effects(self.allib.effects())
             self.allib.main_key = None  # Resets main_key for resetting panels.
 
         else:
-            self.parent.results_panel.reset_panels()
+            self.parent.parent.results_panel.reset_panels()
 
         # Set current tab to ingredients_details tab. FR: 0003
-        Clock.schedule_once(lambda dt: self.parent.results_panel.switch_to(
-            self.parent.results_panel.tab_list[-1]
+        Clock.schedule_once(lambda dt: self.parent.parent.results_panel.switch_to(
+            self.parent.parent.results_panel.tab_list[-1]
             ), 1/60
             )
 
@@ -41,11 +41,11 @@ class SearchBar(GridLayout):
         """Updates items in suggestion box."""
         if self.search_text_input.text != self.retain_query:
             self.retain_query = self.search_text_input.text
-            self.parent.parent.scrollview_suggestions_box.suggestions_box.clear_widgets()
+            self.parent.parent.parent.scrollview_suggestions_box.suggestions_box.clear_widgets()
             items = self.allib.search_suggestions(self.search_text_input.text)
             for x, i in enumerate(items):
                 if x%2 == 0:
-                    self.parent.parent.scrollview_suggestions_box.suggestions_box.add_widget(
+                    self.parent.parent.parent.scrollview_suggestions_box.suggestions_box.add_widget(
                     SearchBoxButton(
                         text = '[color=#AF9BDB][b]'+i+'[/color][/b]',
                         background_color = (62/255, 62/255, 40/255, 1),
@@ -53,7 +53,7 @@ class SearchBar(GridLayout):
                         )
                     )
                 else:
-                    self.parent.parent.scrollview_suggestions_box.suggestions_box.add_widget(
+                    self.parent.parent.parent.scrollview_suggestions_box.suggestions_box.add_widget(
                     SearchBoxButton(
                         text = '[color=#FFEADD][b]'+i+'[/color][/b]',
                         background_color = (62/255, 62/255, 40/255, 1),
@@ -82,11 +82,11 @@ class SearchBar(GridLayout):
     def _add_effects(self, effects):
         """Adds ingredients to the four panels."""
         panels = [
-        self.parent.results_panel.first_effect_panel,
-        self.parent.results_panel.second_effect_panel,
-        self.parent.results_panel.third_effect_panel,
-        self.parent.results_panel.fourth_effect_panel
+        self.parent.parent.results_panel.first_effect_panel,
+        self.parent.parent.results_panel.second_effect_panel,
+        self.parent.parent.results_panel.third_effect_panel,
+        self.parent.parent.results_panel.fourth_effect_panel
         ]
 
         for x, items in enumerate(effects):
-            self.parent.results_panel.add_to_effects_panel(panels[x], items)
+            self.parent.parent.results_panel.add_to_effects_panel(panels[x], items)

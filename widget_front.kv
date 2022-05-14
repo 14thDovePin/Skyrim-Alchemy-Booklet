@@ -2,30 +2,31 @@
 
 
 <FrontWidget>:
-    size_hint: None, None
-    size: self.parent.size
     cols: 1
     page_state: "shown"  # Valid strings are 'shown' and 'hidden' only.
 
     results_panel: results_panel
     search_bar: search_bar
 
-    Label:
-        text: "[b]Skyrim Alchemy\nIngredients Booklet[/b]"
-        markup: True
-        padding: dp(0), dp(20)
-        size_hint: 1, None
-        height: self.texture_size[1]
-        text_size: self.size[0], None
-        halign: 'center'
+    MyGrid:
+        size_hint_y: 1
 
-    SearchBar:
-        id: search_bar
-        size_hint: 1, None
-        height: dp(30)
+        Label:
+            text: "[b]Skyrim Alchemy\nIngredients Booklet[/b]"
+            markup: True
+            padding: dp(0), dp(20)
+            size_hint: 1, None
+            height: self.texture_size[1]
+            text_size: self.size[0], None
+            halign: 'center'
 
-    ResultsTabPanel:
-        id: results_panel
+        SearchBar:
+            id: search_bar
+            size_hint: 1, None
+            height: dp(30)
+
+        ResultsTabPanel:
+            id: results_panel
 
 
 <SearchBar>:

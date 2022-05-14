@@ -16,6 +16,7 @@ from main_searchbar import SearchBar
 
 class AlchemyBooklet(App):
     """Main application."""
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
@@ -96,7 +97,10 @@ class AlchemyBooklet(App):
         if self.main.aip.page_state == 'hidden':
             self.main.aip.height = self.main.height
 
-        # Front_Widget height update.
+        # Front_Widget size & position update.
+        self.main.front_widget.top = self.main.top
+        self.main.front_widget.x = self.main.x
+        self.main.front_widget.width = self.main.width
         # referece "main_front_widget.py" @ line 15-28.
         if self.main.front_widget.page_state == 'hidden':
             self.main.front_widget.height = self.main.height
