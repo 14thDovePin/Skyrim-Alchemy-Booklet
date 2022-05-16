@@ -1,6 +1,7 @@
 import kivy
 kivy.require('2.0.0')  # Kivy version control (02/02/2022 --latest)
 
+
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.lang import Builder
