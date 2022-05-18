@@ -1,4 +1,5 @@
 import json
+import sqlite3
 
 
 class AlchemyQuery:
@@ -6,8 +7,12 @@ class AlchemyQuery:
 
     def __init__(self):
         # Load json database as 'adata'.
-        with open('default_ingredients_database.json', 'r') as f:
-            self.adata = json.load(f)
+        # /with open('default_ingredients_database.json', 'r') as f:
+        # /    self.adata = json.load(f)
+
+        # Create a database connection & cursor to "skyrim_ingredients.db".
+        self.con = sqlite3.connect("skyrim_ingredients.db")
+        self.cur = self.con.cursor()
 
         self._construct_data_pool()
         # Main key for pulling data.
@@ -23,24 +28,39 @@ class AlchemyQuery:
         secondary, tertiary, quaternary],
         ]
         """
+        # \self.data_pool = []
+
+        # \for x in range((len(self.adata['Ingredient'].keys()))):
+        # \    name = self.adata['Ingredient'][str(x)]
+        # \    weight = self.adata['Weight'][str(x)]
+        # \    value = self.adata['Value'][str(x)]
+        # \    obtained = self.adata['Obtained'][str(x)]
+        # \    primary = self.adata['Primary Effect'][str(x)]
+        # \    secondary = self.adata['Secondary Effect'][str(x)]
+        # \    tertiary = self.adata['Tertiary Effect'][str(x)]
+        # \    quaternary = self.adata['Quaternary Effect'][str(x)]
+
+        # \    self.data_pool.append(
+        # \        [name, str(weight), str(value), obtained, \
+        # \        primary, secondary, tertiary, quaternary]
+        # \        )
+
+        # \self.word_pool = [i[0] for i in self.data_pool]
+
+        # Temporary '_construct_data_pool' override.
         self.data_pool = []
+        self.word_pool = []
+        for i in self.cur.execute("SELECT * FROM INGREDIENTS"):
+            i = list(i)
+            # Convert other data types to string before appending to data_pool.
+            for index, item in enumerate(i[:]):
+                if type(item) is not str:
+                    i.pop(index)
+                    i.insert(index, str(item))
 
-        for x in range((len(self.adata['Ingredient'].keys()))):
-            name = self.adata['Ingredient'][str(x)]
-            weight = self.adata['Weight'][str(x)]
-            value = self.adata['Value'][str(x)]
-            obtained = self.adata['Obtained'][str(x)]
-            primary = self.adata['Primary Effect'][str(x)]
-            secondary = self.adata['Secondary Effect'][str(x)]
-            tertiary = self.adata['Tertiary Effect'][str(x)]
-            quaternary = self.adata['Quaternary Effect'][str(x)]
+            self.data_pool.append(i)
+            self.word_pool.append(i[0])
 
-            self.data_pool.append(
-                [name, str(weight), str(value), obtained, \
-                primary, secondary, tertiary, quaternary]
-                )
-
-        self.word_pool = [i[0] for i in self.data_pool]
 
     def search_suggestions(self, qeury_text):
         """Returns possible search suggestions."""
