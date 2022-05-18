@@ -4,6 +4,7 @@ from kivy.uix.gridlayout import GridLayout
 from kv_py_ref import SearchBoxButton
 from query_parser import AlchemyQuery
 
+
 class SearchBar(GridLayout):
     """A searchbar for the application."""
     search_text_input = ObjectProperty(None)
