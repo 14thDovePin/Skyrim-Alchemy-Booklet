@@ -16,10 +16,11 @@ class ResultsTabPanel(TabbedPanel):
     def __init__(self, **kwargs):
         super(ResultsTabPanel, self).__init__(**kwargs)
 
-    def add_to_details_panel(self, details):
+    def update_details_panel(self, details):
         """Updates ingredient_details_panel
         with 'details' from :class: 'AlchemyQuery'"""
         # Add markup to text.
+        details = details[:]
         for x, detail in enumerate(details[:]):
             detail = '[b]'+detail+'[/b]'
             details[x] = detail
@@ -32,7 +33,7 @@ class ResultsTabPanel(TabbedPanel):
         self.ingredient_details_panel.effects.third.value.text = details[6]
         self.ingredient_details_panel.effects.fourth.value.text = details[7]
 
-    def add_to_effects_panel(self, panel, ingredients):
+    def update_effects_panel(self, panel, ingredients):
         """Recursively adds items from 'ingredients' from
         :class: 'AlchemyQuery' to specified 'panel'."""
         panel.clear_widgets()
@@ -43,7 +44,9 @@ class ResultsTabPanel(TabbedPanel):
                         text = '[color=#AF9BDB][b]'+ingredient+'[/color][/b]',
                         background_color = (64/255, 64/255, 64/255, 1),
                         on_release = lambda ins: \
-                        self.parent.parent.search_bar.suggestion_search(ins.text)
+                        self.parent.parent.search_bar.suggestion_search(
+                            ins.text
+                            )
                         )
                     )
             else:
@@ -52,7 +55,9 @@ class ResultsTabPanel(TabbedPanel):
                         text = '[color=#FFEADD][b]'+ingredient+'[/color][/b]',
                         background_color = (64/255, 64/255, 64/255, 1),
                         on_release = lambda ins: \
-                        self.parent.parent.search_bar.suggestion_search(ins.text)
+                        self.parent.parent.search_bar.suggestion_search(
+                            ins.text
+                            )
                         )
                     )
 
