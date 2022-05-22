@@ -3,10 +3,19 @@
 
 <FrontWidget>:
     cols: 1
-    page_state: "shown"  # Valid strings are 'shown' and 'hidden' only.
+    # Other attributes are set or updated at "main.py" > "AlchemyBooklet" >
+    # "_post_update".
 
     results_panel: results_panel
     search_bar: search_bar
+
+    canvas.before:
+        Color:
+            rgb: 24/255, 24/255, 24/255
+
+        Rectangle:
+            size: self.size
+            pos: self.pos
 
     MyGrid:
         size_hint_y: 1

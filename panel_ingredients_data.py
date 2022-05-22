@@ -20,24 +20,10 @@ class IngredientsDataPanel(ScrollView):
     from toggle_page import toggle_page as tp
 
     def toggle_page(self):
-        """Hides/shows "Ingredients Database" page.
+        """Extension of toggle_page method."""
+        self.tp()
 
-        Detailed description.
-        """
-        # Hide/show "Ingredients Database" page.
-        if self.shown:
-            self.top = self.parent.y - 10  # For extra clearance.
-            self.shown = False
+        if self.parent.add_ingredient_button.shown:
+            self.parent.add_ingredient_button.shown = False
         else:
-            self.top = self.parent.top
-            self.shown = True
-
-
-        # Hide/show "Add Custom Ingredient" button.
-        button = self.parent.add_ingredient_button
-        if button.shown:
-            button.top = self.parent.y - 10  # For extra clearance.
-            button.shown = False
-        else:
-            button.y = self.parent.y
-            button.shown = True
+            self.parent.add_ingredient_button.shown = True

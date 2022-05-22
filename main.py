@@ -22,16 +22,8 @@ class AlchemyBooklet(App):
         """Initializes Kivy app prerequisites."""
         super().__init__(**kwargs)
 
-        self._init_widget_tree()
-
-    def _init_widget_tree(self):
         """Loads and initializes the main widget tree and set its presets."""
         self.main = Builder.load_file('root_widget.kv')
-
-        # Explicit update of tab_width. Required to fix tab buttons placement.
-        # Clock.schedule_once(
-        #     self.main.front_widget.results_panel.on_tab_width, 0.1
-        #     )
 
         # Sets default values to tabs and panels.
         self.main.front_widget.results_panel.reset_panels()
@@ -42,34 +34,58 @@ class AlchemyBooklet(App):
         self.main.front_widget.results_panel.ingredient_details_panel.line4.\
         value.halign = 'left'
 
-        # Hide "Add Custom Ingredient" button.
-        # self.main.ingredients_data_panel.toggle_page()
-
-        # Run post first-cycle code block.
+        # Run post kivy initialization code block.
         Clock.schedule_once(lambda dt: self._post_update(), 0.1)
 
-        # Constant Updates.
+        # Constant Updates
         Clock.schedule_interval(
             lambda dt: self._constant_updates(), 1/60  # 60 fps.
             )
 
     def _post_update(self):
-        """Runs after kivy's first cycle."""
+        """Runs after kivy's widget tree initialization."""
 
-        # Explicit update of tab_width. Required to fix tab buttons placement.
+        # Fixes custom tab width of "ResultsTabPanel" at "panel_front_page.kv".
         self.main.front_widget.results_panel.on_tab_width()
 
         # For initial setup of menu drop box width.
         self.main.menu.toggle_box_drop()
 
-        # Initialize size & pos of objects relating to "Ingredients Database".
-        self.main.ingredients_data_panel.height = \
-        self.main.height - self.main.add_ingredient_button.height
-        self.main.ingredients_data_panel.top = self.main.x - 10
-        self.main.add_ingredient_button.top = self.main.x - 10
-
     def _constant_updates(self):
-        """Code block that is constantly updated 60 frames per second."""
+        """Code block that is constantly looped 60 times per second."""
+
+        # Size & pos update of "FrontWidget" rule at "panel_front_page.kv".
+        self.main.front_widget.pos = self.main.pos
+        self.main.front_widget.size = self.main.size
+
+        # Size & pos update of "AppInfo" at "panel_application_info.kv".
+        self.main.app_info.size = self.main.size
+        if self.main.app_info.shown:
+            self.main.app_info.pos = self.main.pos
+        else:
+            self.main.app_info.top = self.main.y - 10
+
+        # Size & pos update of "IngredientsDataPanel" at 
+        # "panel_ingredients_data.kv".
+        self.main.ingredients_data_panel.width = self.main.width
+        self.main.ingredients_data_panel.height = self.main.height - \
+        self.main.add_ingredient_button.height
+        self.main.ingredients_data_panel.x = self.main.x
+        if self.main.ingredients_data_panel.shown:
+            self.main.ingredients_data_panel.top = self.main.top
+        else:
+            self.main.ingredients_data_panel.top = self.main.y - 10
+
+        # Size & pos update of "AddIngredientButton" at 
+        # "panel_ingredients_data.kv".
+        self.main.add_ingredient_button.width = self.main.width
+        self.main.add_ingredient_button.height = \
+        self.main.add_ingredient_button.texture_size[1]
+        self.main.add_ingredient_button.x = self.main.x
+        if self.main.add_ingredient_button.shown:
+            self.main.add_ingredient_button.y = self.main.y
+        else:
+            self.main.add_ingredient_button.top = self.main.y - 10
 
         # Scrollview suggestion box width update.
         self.main.scrollview_suggestions_box.width = \
@@ -100,30 +116,6 @@ class AlchemyBooklet(App):
         # Menu drop box position update.
         self.main.scrollview_menu_drop_box.top = self.main.menu.y
         self.main.scrollview_menu_drop_box.right = self.main.right
-
-        # App info size & position update.
-        self.main.app_info.top = self.main.top
-        self.main.app_info.x = self.main.x
-        self.main.app_info.width = self.main.width
-        # referece "main_app_info.py" @ line 15-28.
-        if self.main.app_info.page_state == 'hidden':
-            self.main.app_info.height = self.main.height
-
-        # # Ingredients Data Panel size & position update.
-        # self.main.ingredients_data_panel.top = self.main.top
-        # self.main.ingredients_data_panel.x = self.main.x
-        # self.main.ingredients_data_panel.width = self.main.width
-        # # referece "main_aip.py" @ line 15-28.
-        # if self.main.ingredients_data_panel.page_state == 'hidden':
-        #     self.main.ingredients_data_panel.height = self.main.height
-
-        # Front_Widget size & position update.
-        self.main.front_widget.top = self.main.top
-        self.main.front_widget.x = self.main.x
-        self.main.front_widget.width = self.main.width
-        # referece "main_front_widget.py" @ line 15-28.
-        if self.main.front_widget.page_state == 'hidden':
-            self.main.front_widget.height = self.main.height
 
         # Show front_widget if every other page is hidden.
         pages = [i for i in self.main.children]

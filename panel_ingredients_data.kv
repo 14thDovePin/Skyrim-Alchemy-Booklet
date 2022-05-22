@@ -10,22 +10,18 @@
 
 <AddIngredientButton@Button>:
     shown: False  # For hiding and showing the button.
-    width: self.parent.width
-    height: self.texture_size[1]
-    x: self.parent.x
     markup: True
     text: '[b][size=16dp]Add Custom Ingredient'
     padding: 0, 10
     on_press: print('Button Triggerd | Add Custom Ingredient')
-    # Other attributes are set at "main.py" > "AlchemyBooklet" > "_post_update".
+    # Other attributes are set or updated at "main.py" > "AlchemyBooklet" >
+    # "_post_update".
 
 
 <IngredientsDataPanel>:
-    size: self.parent.width, self.parent.height
-    x: self.parent.x
-    page_state: "shown"  # Valid strings are 'shown' and 'hidden' only.
     shown: False   # For hiding and showing the page.
-    # Other attributes are set at "main.py" > "AlchemyBooklet" > "_post_update".
+    # Other attributes are set or updated at "main.py" > "AlchemyBooklet" >
+    # "_post_update".
 
     canvas.before:
         Color:

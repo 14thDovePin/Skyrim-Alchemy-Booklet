@@ -6,5 +6,3 @@ class FrontWidget(ScrollView):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
-    from toggle_page import toggle_page
