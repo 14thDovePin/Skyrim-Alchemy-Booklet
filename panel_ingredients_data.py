@@ -17,4 +17,19 @@ class IngredientsDataPanel(ScrollView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    from toggle_page import toggle_page
+    from toggle_page import toggle_page as tp
+
+    def toggle_page(self):
+        """Extension of the class method "toggle_page".
+
+        Hides/shows the "Add Custom Ingredient" button.
+        """
+        self.tp()
+        button = self.parent.add_ingredient_button
+
+        if button.shown:
+            button.top = self.parent.y - 10  # For extra clearance.
+            button.shown = False
+        else:
+            button.y = self.parent.y
+            button.shown = True

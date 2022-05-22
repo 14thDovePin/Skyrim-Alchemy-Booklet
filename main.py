@@ -45,6 +45,9 @@ class AlchemyBooklet(App):
         # For initial setup of menu drop box width.
         Clock.schedule_once(lambda dt: self.main.menu.toggle_box_drop(), 1/60)
 
+        # Hide "Add Custom Ingredient" button.
+        # self.main.ingredients_data_panel.toggle_page()
+
         # Constant Updates.
         Clock.schedule_interval(
             lambda dt: self._constant_updates(), 1/60  # 60 fps.

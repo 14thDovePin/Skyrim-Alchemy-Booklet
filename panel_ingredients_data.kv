@@ -1,3 +1,26 @@
+#:include rd_templates.kv
+
+
+# repetative code @ panel_applicatoin_info.kv
+<CustomLabel@MyLabel>:
+    text_size: self.width, None
+    halign: 'center'
+    padding: dp(20), dp(0)
+
+
+<AddIngredientButton@Button>:
+    shown: False  # For hiding and showing the button.
+    width: self.parent.width
+    height: self.texture_size[1]
+    x: self.parent.x
+    # Not sure why 10 doesn't work like in "panel_ingredients_data.py".
+    top: self.parent.y - 100
+    markup: True
+    text: '[b][size=16dp]Add Custom Ingredient'
+    padding: 0, 10
+    on_press: print('Button Triggerd | Add Custom Ingredient')
+
+
 <IngredientsDataPanel>:
     size: 0, 0
     page_state: "shown"  # Valid strings are 'shown' and 'hidden' only.
@@ -5,8 +28,10 @@
     MyGrid:
 
         Label:
-            text: "Hello World! This page is the add ingredients page.."
-        Button:
+        CustomLabel:
+            text: "[b][size=24dp]Ingredients Database"
+        Label:
+
         Button:
         Button:
         Button:

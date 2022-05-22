@@ -10,23 +10,27 @@ RootWidget:
 
 <RootWidget@Widget>:
     front_widget: front_widget
-    ingredients_data_panel: ingredients_data_panel
-    app_info: app_info
     menu: menu
+    ingredients_data_panel: ingredients_data_panel
+    add_ingredient_button: add_ingredient_button
+    app_info: app_info
     scrollview_menu_drop_box: scrollview_menu_drop_box
     scrollview_suggestions_box: scrollview_suggestions_box
 
     FrontWidget:
         id: front_widget
 
+    Menu:
+        id: menu
+
     IngredientsDataPanel:
         id: ingredients_data_panel
 
+    AddIngredientButton:
+        id: add_ingredient_button
+
     AppInfo:
         id: app_info
-
-    Menu:
-        id: menu
 
     MenuDropBox:
         id: scrollview_menu_drop_box
@@ -81,12 +85,12 @@ RootWidget:
             size_hint: None, 1
             text_size: None, self.height
             background_color: 0/255, 34/255, 102/255, 1
-            text: "Add Custom Ingredient"
+            text: "[b]Manage Ingredients"
             on_press: root.parent.ingredients_data_panel.toggle_page()
 
         MenuBoxButton:
             size_hint: None, 1
             text_size: None, self.height
             background_color: 0/255, 34/255, 102/255, 1
-            text: "App Info"
+            text: "[b]Application Info"
             on_press: root.parent.app_info.toggle_page()
