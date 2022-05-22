@@ -29,9 +29,9 @@ class AlchemyBooklet(App):
         self.main = Builder.load_file('root_widget.kv')
 
         # Explicit update of tab_width. Required to fix tab buttons placement.
-        Clock.schedule_once(
-            self.main.front_widget.results_panel.on_tab_width, 0.1
-            )
+        # Clock.schedule_once(
+        #     self.main.front_widget.results_panel.on_tab_width, 0.1
+        #     )
 
         # Sets default values to tabs and panels.
         self.main.front_widget.results_panel.reset_panels()
@@ -42,16 +42,31 @@ class AlchemyBooklet(App):
         self.main.front_widget.results_panel.ingredient_details_panel.line4.\
         value.halign = 'left'
 
-        # For initial setup of menu drop box width.
-        Clock.schedule_once(lambda dt: self.main.menu.toggle_box_drop(), 1/60)
-
         # Hide "Add Custom Ingredient" button.
         # self.main.ingredients_data_panel.toggle_page()
+
+        # Run post first-cycle code block.
+        Clock.schedule_once(lambda dt: self._post_update(), 0.1)
 
         # Constant Updates.
         Clock.schedule_interval(
             lambda dt: self._constant_updates(), 1/60  # 60 fps.
             )
+
+    def _post_update(self):
+        """Runs after kivy's first cycle."""
+
+        # Explicit update of tab_width. Required to fix tab buttons placement.
+        self.main.front_widget.results_panel.on_tab_width()
+
+        # For initial setup of menu drop box width.
+        self.main.menu.toggle_box_drop()
+
+        # Initialize size & pos of objects relating to "Ingredients Database".
+        self.main.ingredients_data_panel.height = \
+        self.main.height - self.main.add_ingredient_button.height
+        self.main.ingredients_data_panel.top = self.main.x - 10
+        self.main.add_ingredient_button.top = self.main.x - 10
 
     def _constant_updates(self):
         """Code block that is constantly updated 60 frames per second."""
@@ -94,13 +109,13 @@ class AlchemyBooklet(App):
         if self.main.app_info.page_state == 'hidden':
             self.main.app_info.height = self.main.height
 
-        # Ingredients Data Panel size & position update.
-        self.main.ingredients_data_panel.top = self.main.top
-        self.main.ingredients_data_panel.x = self.main.x
-        self.main.ingredients_data_panel.width = self.main.width
-        # referece "main_aip.py" @ line 15-28.
-        if self.main.ingredients_data_panel.page_state == 'hidden':
-            self.main.ingredients_data_panel.height = self.main.height
+        # # Ingredients Data Panel size & position update.
+        # self.main.ingredients_data_panel.top = self.main.top
+        # self.main.ingredients_data_panel.x = self.main.x
+        # self.main.ingredients_data_panel.width = self.main.width
+        # # referece "main_aip.py" @ line 15-28.
+        # if self.main.ingredients_data_panel.page_state == 'hidden':
+        #     self.main.ingredients_data_panel.height = self.main.height
 
         # Front_Widget size & position update.
         self.main.front_widget.top = self.main.top
