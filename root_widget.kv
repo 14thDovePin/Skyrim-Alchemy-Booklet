@@ -1,8 +1,8 @@
 #:kivy 2.0.0
-#:include widget_aip.kv
-#:include widget_app_info.kv
-#:include widget_front.kv
-#:include widget_temp.kv
+#:include panel_application_info.kv
+#:include panel_front_page.kv
+#:include panel_ingredients_data.kv
+#:include rd_templates.kv
 
 
 RootWidget:
@@ -10,7 +10,7 @@ RootWidget:
 
 <RootWidget@Widget>:
     front_widget: front_widget
-    aip: aip
+    ingredients_data_panel: ingredients_data_panel
     app_info: app_info
     menu: menu
     scrollview_menu_drop_box: scrollview_menu_drop_box
@@ -19,8 +19,8 @@ RootWidget:
     FrontWidget:
         id: front_widget
 
-    AIP:
-        id: aip
+    IngredientsDataPanel:
+        id: ingredients_data_panel
 
     AppInfo:
         id: app_info
@@ -82,7 +82,7 @@ RootWidget:
             text_size: None, self.height
             background_color: 0/255, 34/255, 102/255, 1
             text: "Add Custom Ingredient"
-            on_press: root.parent.aip.toggle_page()
+            on_press: root.parent.ingredients_data_panel.toggle_page()
 
         MenuBoxButton:
             size_hint: None, 1

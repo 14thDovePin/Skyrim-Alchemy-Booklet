@@ -7,5 +7,5 @@ class AppInfo(ScrollView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    from main_toggle_page import toggle_page
+    from toggle_page import toggle_page
         

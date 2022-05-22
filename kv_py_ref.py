@@ -1,4 +1,4 @@
-"""Classes here are for python references to the kv file/s rule definition."""
+"""Python references to the Kivy's rule definition."""
 
 
 from kivy.uix.button import Button
@@ -7,6 +7,7 @@ from kivy.uix.button import Button
 class SearchBoxButton(Button):
     """For adding a dynamic number of buttons."""
     pass
+
 
 class MenuBoxButton(SearchBoxButton):
     """For toggling menu_drop_box once an item has been selected."""

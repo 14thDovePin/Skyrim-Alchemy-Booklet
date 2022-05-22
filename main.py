@@ -7,25 +7,26 @@ from kivy.clock import Clock
 from kivy.lang import Builder
 
 
-from main_app_info import AppInfo
-from main_aip import AIP
-from main_front_widget import FrontWidget
-from main_menu import Menu
-from main_resultstabpanel import ResultsTabPanel
-from main_searchbar import SearchBar
+from menu_button import Menu
+from panel_application_info import AppInfo
+from panel_front_page import FrontWidget
+from panel_ingredients_data import IngredientsDataPanel
+from results_tab_panel import ResultsTabPanel
+from search_bar import SearchBar
 
 
 class AlchemyBooklet(App):
-    """Main application."""
+    """Kivy App object."""
 
     def __init__(self, **kwargs):
+        """Initializes Kivy app prerequisites."""
         super().__init__(**kwargs)
 
         self._init_widget_tree()
 
     def _init_widget_tree(self):
-        """Loads and initializes the main widget tree and its presets."""
-        self.main = Builder.load_file('widget_root.kv')
+        """Loads and initializes the main widget tree and set its presets."""
+        self.main = Builder.load_file('root_widget.kv')
 
         # Explicit update of tab_width. Required to fix tab buttons placement.
         Clock.schedule_once(
@@ -90,13 +91,13 @@ class AlchemyBooklet(App):
         if self.main.app_info.page_state == 'hidden':
             self.main.app_info.height = self.main.height
 
-        # AIP size & position update.
-        self.main.aip.top = self.main.top
-        self.main.aip.x = self.main.x
-        self.main.aip.width = self.main.width
+        # Ingredients Data Panel size & position update.
+        self.main.ingredients_data_panel.top = self.main.top
+        self.main.ingredients_data_panel.x = self.main.x
+        self.main.ingredients_data_panel.width = self.main.width
         # referece "main_aip.py" @ line 15-28.
-        if self.main.aip.page_state == 'hidden':
-            self.main.aip.height = self.main.height
+        if self.main.ingredients_data_panel.page_state == 'hidden':
+            self.main.ingredients_data_panel.height = self.main.height
 
         # Front_Widget size & position update.
         self.main.front_widget.top = self.main.top

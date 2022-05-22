@@ -2,7 +2,7 @@ from kivy.clock import Clock
 from kivy.properties import ObjectProperty
 from kivy.uix.gridlayout import GridLayout
 from kv_py_ref import SearchBoxButton
-from query_parser import ParseQuery
+from app_api import ParseQuery
 
 
 class SearchBar(GridLayout):
