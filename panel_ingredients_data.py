@@ -23,6 +23,13 @@ class IngredientsDataPanel(ScrollView):
         """Extension of toggle_page method."""
         self.tp()
 
+        # Hide/show "ReturnButton" of "panel_ingredients_data.kv".
+        if self.parent.return_button.shown:
+            self.parent.return_button.shown = False
+        else:
+            self.parent.return_button.shown = True
+
+        # Hide/show "AddIngredientButton" of "panel_ingredients_data.kv".
         if self.parent.add_ingredient_button.shown:
             self.parent.add_ingredient_button.shown = False
         else:

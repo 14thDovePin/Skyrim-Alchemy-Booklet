@@ -8,12 +8,22 @@
     padding: dp(20), dp(0)
 
 
+<ReturnButton@Button>:
+    shown: False  # For hiding and showing the button.
+    markup: True
+    text: "[b][size=16dp]Return.."
+    padding: 0, 15
+    on_release: self.parent.ingredients_data_panel.toggle_page()
+    # Other attributes are set or updated at "main.py" > "AlchemyBooklet" >
+    # "_post_update".
+
+
 <AddIngredientButton@Button>:
     shown: False  # For hiding and showing the button.
     markup: True
     text: '[b][size=16dp]Add Custom Ingredient'
     padding: 0, 10
-    on_press: print('Button Triggerd | Add Custom Ingredient')
+    on_release: print('Button Triggerd | Add Custom Ingredient')
     # Other attributes are set or updated at "main.py" > "AlchemyBooklet" >
     # "_post_update".
 
@@ -22,6 +32,8 @@
     shown: False   # For hiding and showing the page.
     # Other attributes are set or updated at "main.py" > "AlchemyBooklet" >
     # "_post_update".
+
+    panel_grid: panel_grid
 
     canvas.before:
         Color:
@@ -32,14 +44,12 @@
             pos: self.pos
 
     MyGrid:
+        id: panel_grid
 
-        Label:
         CustomLabel:
             text: "[b][size=24dp]Ingredients Database"
-        Label:
+            padding: 0, 10
 
         Button:
         Button:
         Button:
-            text: "Return to Main"
-            on_press: root.toggle_page()

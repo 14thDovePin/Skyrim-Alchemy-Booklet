@@ -54,6 +54,15 @@ class AlchemyBooklet(App):
     def _constant_updates(self):
         """Code block that is constantly looped 60 times per second."""
 
+        # Size & pos update of object id 'debug_button' of "RootWidget" at
+        # "root_widget.kv".
+        self.main.debug_button.size = self.main.debug_button.texture_size
+        self.main.debug_button.x = self.main.x
+        if self.main.debug_button.shown:
+            self.main.debug_button.y = self.main.y
+        else:
+            self.main.debug_button.top = self.main.y - 10
+
         # Size & pos update of "FrontWidget" rule at "panel_front_page.kv".
         self.main.front_widget.pos = self.main.pos
         self.main.front_widget.size = self.main.size
@@ -75,6 +84,18 @@ class AlchemyBooklet(App):
             self.main.ingredients_data_panel.top = self.main.top
         else:
             self.main.ingredients_data_panel.top = self.main.y - 10
+
+        # Size & pos update of "ReturnButton" at 
+        # "panel_ingredients_data.kv".
+        self.main.return_button.width = \
+        self.main.ingredients_data_panel.panel_grid.width*1/6
+        self.main.return_button.height = \
+        self.main.return_button.texture_size[1]
+        self.main.return_button.right = self.main.right
+        if self.main.return_button.shown:
+            self.main.return_button.top = self.main.top
+        else:
+            self.main.return_button.top = self.main.y - 10
 
         # Size & pos update of "AddIngredientButton" at 
         # "panel_ingredients_data.kv".

@@ -12,6 +12,6 @@ class SearchBoxButton(Button):
 class MenuBoxButton(SearchBoxButton):
     """For toggling menu_drop_box once an item has been selected."""
 
-    def on_press(self):
+    def on_release(self):
         # MyGrid > MenuDropBox > RootWidget
         self.parent.parent.parent.menu.toggle_box_drop()
