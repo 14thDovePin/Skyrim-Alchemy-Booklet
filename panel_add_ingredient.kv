@@ -17,6 +17,16 @@
     focus: True
 
 
+<EffectsButton@Button>:
+    size_hint_y: None
+    height: dp(40)
+
+
+<MySpinner@Spinner>:
+    size_hint_y: None
+    height: dp(30)
+
+
 <AddIngredient>:
     shown: True   # For hiding and showing the page.
     # Other attributes are set or updated at "main.py" > "AlchemyBooklet" >
@@ -55,8 +65,26 @@
             id: obtained_at
             hint_text: 'Obtained at i.e. "Found near epic mountain."'
 
-        Label:
         PanelLabel:
             text: '[b][size=24dp]Effects'
             halign: 'left'
-            padding: dp(10), dp(0)
+            padding: dp(10), dp(10)
+
+        MyGrid:
+            cols: 2
+
+            MySpinner:
+                text: 'Primary Effect'
+                values: root.return_effects()
+
+            MySpinner:
+                text: 'Secondary Effect'
+                values: root.return_effects()
+
+            MySpinner:
+                text: 'Tertiary Effect'
+                values: root.return_effects()
+
+            MySpinner:
+                text: 'Quaternary Effect'
+                values: root.return_effects()
