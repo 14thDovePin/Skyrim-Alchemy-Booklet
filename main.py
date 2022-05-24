@@ -109,6 +109,10 @@ class AlchemyBooklet(App):
         else:
             self.main.add_ingredient_panel.top = self.main.y - 10
 
+        # Height update of 'note_text' of "panel_add_ingredient.kv".
+        self.main.add_ingredient_panel.ids.note_text.height = \
+        self.main.add_ingredient_panel.ids.note_text.texture_size[1]
+
         # Size & pos update of "AddIngredientButton" at 
         # "panel_ingredients_data.kv".
         self.main.add_ingredient_button.width = self.main.width

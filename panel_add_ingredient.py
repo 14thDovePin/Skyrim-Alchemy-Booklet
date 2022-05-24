@@ -18,4 +18,14 @@ class AddIngredient(ScrollView):
             for effect in item:
                 effects.append(effect)
         effects = set(sorted(effects))
-        return sorted(list(effects))
+        effects = sorted(list(effects))
+        effects.insert(0, 'Custom')
+        return effects
+
+    def check_values(self):
+        """Checks all of the input values in the panel."""
+        pass
+
+    def cancel(self):
+        """Toggles the page and removes and resets all the panel entries."""
+        pass

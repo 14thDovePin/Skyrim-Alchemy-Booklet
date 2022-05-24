@@ -74,17 +74,69 @@
             cols: 2
 
             MySpinner:
+                id: primary_effect
                 text: 'Primary Effect'
                 values: root.return_effects()
 
             MySpinner:
+                id: secondary_effect
                 text: 'Secondary Effect'
                 values: root.return_effects()
 
             MySpinner:
+                id: tertiary_effect
                 text: 'Tertiary Effect'
                 values: root.return_effects()
 
             MySpinner:
+                id: quaternary_effect
                 text: 'Quaternary Effect'
                 values: root.return_effects()
+
+            MyTextInput:
+                id: custom_primary_effect
+                hint_text: 'Custom Primary Effect'
+                disabled: True if not primary_effect.text == 'Custom' else False
+
+            MyTextInput:
+                id: custom_secondary_effect
+                hint_text: 'Custom Secondary Effect'
+                disabled: True if not secondary_effect.text == 'Custom' else False
+
+            MyTextInput:
+                id: custom_tertiary_effect
+                hint_text: 'Custom Tertiary Effect'
+                disabled: True if not tertiary_effect.text == 'Custom' else False
+
+            MyTextInput:
+                id: custom_quaternary_effect
+                hint_text: 'Custom Quaternary Effect'
+                disabled: True if not quaternary_effect.text == 'Custom' else False
+
+        PanelLabel:
+            text: "[b][size=24dp]Adding Notes.."
+            halign: 'left'
+            padding: dp(10), dp(10)
+
+        PanelLabel:
+            id: note_text
+            text: f"[b][size=18dp]    1. Fill up all the required entries.\n    2. Type your ingredient information neatly and concisely.\n    3. Ingredient name must not be one that is already in the database. This will result in failing to add the ingredient to the database.\n    4. Each time you add a new custom ingredient with a custom effect/s. The effect/s will be added to the list of options inside the dropbox for choosing an effect for the ingredient."
+            halign: 'left'
+            padding: dp(15), dp(0)
+
+        MyGrid:
+            cols: 2
+
+            Button:
+                size_hint_y: None
+                height: dp(40)
+                markup: True
+                text: '[b][size=24dp]Cancel'
+                on_release: print('pressed Cancel of Add Ingredient panel')
+
+            Button:
+                markup: True
+                size_hint_y: None
+                height: dp(40)
+                text: '[b][size=24dp]Add Ingredient'
+                on_release: print('pressed Add Ingredient of Add Ingredient panel')
