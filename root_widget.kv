@@ -1,4 +1,5 @@
 #:kivy 2.0.0
+#:include panel_add_ingredient.kv
 #:include panel_application_info.kv
 #:include panel_front_page.kv
 #:include panel_ingredients_data.kv
@@ -12,8 +13,9 @@ RootWidget:
     front_widget: front_widget
     menu: menu
     ingredients_data_panel: ingredients_data_panel
-    return_button: return_button
     add_ingredient_button: add_ingredient_button
+    return_button: return_button
+    add_ingredient_panel: add_ingredient_panel
     app_info: app_info
     scrollview_menu_drop_box: scrollview_menu_drop_box
     scrollview_suggestions_box: scrollview_suggestions_box
@@ -28,11 +30,14 @@ RootWidget:
     IngredientsDataPanel:
         id: ingredients_data_panel
 
+    AddIngredientButton:
+        id: add_ingredient_button
+
     ReturnButton
         id: return_button
 
-    AddIngredientButton:
-        id: add_ingredient_button
+    AddIngredient:
+        id: add_ingredient_panel
 
     AppInfo:
         id: app_info
@@ -44,7 +49,7 @@ RootWidget:
         id: scrollview_suggestions_box
 
     Button:
-        shown: False   # For hiding and showing the button.
+        shown: True   # For hiding and showing the button.
         id: debug_button
         markup: True
         padding: 5, 12

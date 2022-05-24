@@ -1,0 +1,62 @@
+#:include rd_templates.kv
+
+
+<PanelLabel@Label>:
+    size_hint_y: None
+    height: dp(40)
+    markup: True
+    text_size: self.width, None
+    halign: 'center'
+    padding: dp(20), dp(0)
+
+
+<MyTextInput@TextInput>:
+    size_hint_y: None
+    height: dp(30)
+    multiline: False
+    focus: True
+
+
+<AddIngredient>:
+    shown: True   # For hiding and showing the page.
+    # Other attributes are set or updated at "main.py" > "AlchemyBooklet" >
+    # "_post_update".
+
+    panel_grid: panel_grid
+
+    canvas.before:
+        Color:
+            rgb: 48/255, 48/255, 48/255
+
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    MyGrid:
+        row_default_height: 0
+        id: panel_grid
+
+        PanelLabel:
+            text: "[b][size=24dp]Add Ingredient"
+
+        MyTextInput:
+            id: name
+            hint_text: 'Ingredient Name i.e. "Epic Herb"'
+
+        MyTextInput:
+            id: value
+            hint_text: 'Value i.e. "3"'
+
+        MyTextInput:
+            id: weight
+            hint_text: 'Weight i.e. "0.2"'
+
+        MyTextInput:
+            id: obtained_at
+            hint_text: 'Obtained at i.e. "Found near epic mountain."'
+
+        Label:
+        PanelLabel:
+            text: '[b][size=24dp]Effects'
+            halign: 'left'
+            padding: dp(10), dp(0)

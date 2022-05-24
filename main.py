@@ -8,6 +8,7 @@ from kivy.lang import Builder
 
 
 from menu_button import Menu
+from panel_add_ingredient import AddIngredient
 from panel_application_info import AppInfo
 from panel_front_page import FrontWidget
 from panel_ingredients_data import IngredientsDataPanel
@@ -97,6 +98,17 @@ class AlchemyBooklet(App):
         else:
             self.main.return_button.top = self.main.y - 10
 
+        # Size & pos update of "AddIngredient" at 
+        # "panel_add_ingredient.kv".
+        self.main.add_ingredient_panel.width = self.main.width
+        self.main.add_ingredient_panel.height = self.main.height - \
+        self.main.add_ingredient_button.height
+        self.main.add_ingredient_panel.x = self.main.x
+        if self.main.add_ingredient_panel.shown:
+            self.main.add_ingredient_panel.top = self.main.top
+        else:
+            self.main.add_ingredient_panel.top = self.main.y - 10
+
         # Size & pos update of "AddIngredientButton" at 
         # "panel_ingredients_data.kv".
         self.main.add_ingredient_button.width = self.main.width
@@ -137,19 +149,6 @@ class AlchemyBooklet(App):
         # Menu drop box position update.
         self.main.scrollview_menu_drop_box.top = self.main.menu.y
         self.main.scrollview_menu_drop_box.right = self.main.right
-
-        # Show front_widget if every other page is hidden.
-        pages = [i for i in self.main.children]
-        pages.remove(self.main.front_widget)
-        pages_state = []
-        for i in pages:
-            if hasattr(i, "page_state"):
-                if i.page_state == "shown":
-                    pages_state.append(True)
-                else:
-                    pages_state.append(False)
-        if all(pages_state):
-            self.main.front_widget.page_state = 'hidden'
 
     def build(self):
         return self.main
