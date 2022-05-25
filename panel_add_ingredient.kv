@@ -28,7 +28,7 @@
 
 
 <AddIngredient>:
-    shown: True   # For hiding and showing the page.
+    shown: False   # For hiding and showing the page.
     # Other attributes are set or updated at "main.py" > "AlchemyBooklet" >
     # "_post_update".
 
@@ -132,7 +132,7 @@
                 height: dp(40)
                 markup: True
                 text: '[b][size=24dp]Cancel'
-                on_release: print('pressed Cancel of Add Ingredient panel')
+                on_release: root.toggle_page()
 
             Button:
                 size_hint_y: None

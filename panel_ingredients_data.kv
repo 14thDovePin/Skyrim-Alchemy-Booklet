@@ -23,7 +23,7 @@
     markup: True
     text: '[b][size=16dp]Add Custom Ingredient'
     padding: 0, 10
-    on_release: print('Button Triggerd | Add Custom Ingredient')
+    on_release: self.parent.add_ingredient_panel.toggle_page()
     # Other attributes are set or updated at "main.py" > "AlchemyBooklet" >
     # "_post_update".
 

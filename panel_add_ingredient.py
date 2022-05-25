@@ -1,10 +1,10 @@
+import weakref
+
+
 from kivy.metrics import dp
 from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
 from app_api import ParseQuery
-
-
-import weakref
 
 
 class AddIngredient(ScrollView):
@@ -17,6 +17,8 @@ class AddIngredient(ScrollView):
 
         # For updating the "error_label" of "_check_values" when it is present.
         self.error_label = False
+
+    from toggle_page import toggle_page
 
     def return_effects(self):
         """Returns the all list of ingredient's effects from the database."""
