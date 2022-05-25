@@ -3,8 +3,12 @@ import weakref
 
 from kivy.metrics import dp
 from kivy.uix.label import Label
+from kivy.uix.popup import Popup
 from kivy.uix.scrollview import ScrollView
 from app_api import ParseQuery
+
+
+from kv_py_ref import ConfirmAdd
 
 
 class AddIngredient(ScrollView):
@@ -42,7 +46,13 @@ class AddIngredient(ScrollView):
 
     def add_ingredient(self):
         """Compiles and add the input values of the panel."""
-        self._check_values()
+        # Check and return if there are any errors.
+        if self._check_values():
+            return
+
+        # Popup confirmation before adding ingredient entry into the database.
+        confirm_popup = ConfirmAdd()
+        confirm_popup.open()
 
     def _check_values(self):
         """Checks all of the input values of the panel.
@@ -182,11 +192,15 @@ class AddIngredient(ScrollView):
                 self.ids['error_label'] = weakref.ref(error_label)
                 self.error_label = True
 
+            return True
+
         # Check if error labels still exists and remove them.
         else:
             if 'error_label' in self.ids.keys():
                 self.panel_grid.remove_widget(self.ids.error_title)
                 self.panel_grid.remove_widget(self.ids.error_label)
+
+            return False
 
     def _check_number(self, number):
         """Checks if the string can be considerd an integer or a float.

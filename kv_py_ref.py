@@ -2,6 +2,7 @@
 
 
 from kivy.uix.button import Button
+from kivy.uix.popup import Popup
 
 
 class SearchBoxButton(Button):
@@ -15,3 +16,8 @@ class MenuBoxButton(SearchBoxButton):
     def on_release(self):
         # MyGrid > MenuDropBox > RootWidget
         self.parent.parent.parent.menu.toggle_box_drop()
+
+
+class ConfirmAdd(Popup):
+    """Popup python reference."""
+    pass

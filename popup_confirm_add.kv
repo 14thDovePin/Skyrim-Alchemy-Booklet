@@ -1,0 +1,42 @@
+#:import Factory kivy.factory.Factory
+#:include rd_templates.kv
+
+
+<ConfirmAddContents@ScrollView>:
+    id: confirm_add
+    canvas.before:
+        Color:
+            rgb: 48/255, 48/255, 48/255
+
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+    MyGrid:
+        cols: 1
+        id: panel_grid
+
+        Label:
+            text: 'Hello'
+
+        Label:
+            text: 'World'
+
+        MyGrid:
+            cols: 2
+
+            Button:
+                text: 'Cancel'
+                on_release: root.parent.parent.parent.dismiss()
+
+            Button:
+                text: 'Confirm'
+                on_release: pass
+
+
+<ConfirmAdd@Popup>:
+    size_hint: None, None
+    size: 400, 400
+    auto_dismiss: False
+
+    ConfirmAddContents:
