@@ -100,9 +100,7 @@ class AlchemyBooklet(App):
 
         # Size & pos update of "AddIngredient" at 
         # "panel_add_ingredient.kv".
-        self.main.add_ingredient_panel.width = self.main.width
-        self.main.add_ingredient_panel.height = self.main.height - \
-        self.main.add_ingredient_button.height
+        self.main.add_ingredient_panel.size = self.main.size
         self.main.add_ingredient_panel.x = self.main.x
         if self.main.add_ingredient_panel.shown:
             self.main.add_ingredient_panel.top = self.main.top
@@ -112,6 +110,17 @@ class AlchemyBooklet(App):
         # Height update of 'note_text' of "panel_add_ingredient.kv".
         self.main.add_ingredient_panel.ids.note_text.height = \
         self.main.add_ingredient_panel.ids.note_text.texture_size[1]
+
+        # Height, width, and text_size update of the error labels of
+        # "_check_values" of "AddIngredint" of "panel_add_ingredient.py".
+        if self.main.add_ingredient_panel.error_label:
+            self.main.add_ingredient_panel.panel_grid.children[1].height = \
+            self.main.add_ingredient_panel.panel_grid.children[1].\
+            texture_size[1]
+            self.main.add_ingredient_panel.panel_grid.children[1].width \
+            = self.main.width
+            self.main.add_ingredient_panel.panel_grid.children[1].text_size[0]\
+            = self.main.width
 
         # Size & pos update of "AddIngredientButton" at 
         # "panel_ingredients_data.kv".

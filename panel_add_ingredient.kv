@@ -125,7 +125,7 @@
             padding: dp(15), dp(0)
 
         MyGrid:
-            cols: 2
+            cols: 3
 
             Button:
                 size_hint_y: None
@@ -135,8 +135,15 @@
                 on_release: print('pressed Cancel of Add Ingredient panel')
 
             Button:
+                size_hint_y: None
+                height: dp(40)
+                markup: True
+                text: '[b][size=24dp]Reset Entries'
+                on_release: print('pressed Reset Entries of Add Ingredient panel')
+
+            Button:
                 markup: True
                 size_hint_y: None
                 height: dp(40)
                 text: '[b][size=24dp]Add Ingredient'
-                on_release: print('pressed Add Ingredient of Add Ingredient panel')
+                on_release: root.add_ingredient()
