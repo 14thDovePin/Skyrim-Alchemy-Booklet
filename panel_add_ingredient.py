@@ -158,9 +158,10 @@ class AddIngredient(ScrollView):
         # Check IF there are any errors
         if error_messages:
 
-            # Check IF error label exists and updates them.
-            if 'error_label' in self.ids.keys():
-                self.ids.error_label.text = '[b][size=18dp]' + error_messages
+            # Check IF error labels exists and updates them.
+            if len(self.panel_grid.children) == 12:
+                self.panel_grid.children[1].text = '[b][size=18dp]' + \
+                error_messages
 
             # Output errors to panel by using labels.
             else:
@@ -185,21 +186,18 @@ class AddIngredient(ScrollView):
                 self.panel_grid.add_widget(error_title, 1)
                 self.panel_grid.add_widget(error_label, 1)
 
-                # Update their id references and set the "error_label" atribute of
-                # "AddIngredient" class to True to enable the label's height update
-                # at "_constant_updates" of "AlchemyBooklet" of "main.py".
-                self.ids['error_title'] = weakref.ref(error_title)
-                self.ids['error_label'] = weakref.ref(error_label)
+                # Set the "error_label" atribute of "AddIngredient" class to
+                # True to enable the label's height update at
+                # "_constant_updates" of "AlchemyBooklet" of "main.py".
                 self.error_label = True
 
             return True
 
         # Check if error labels still exists and remove them.
         else:
-            if 'error_label' in self.ids.keys():
-                self.panel_grid.remove_widget(self.ids.error_title)
-                self.panel_grid.remove_widget(self.ids.error_label)
-
+            if len(self.panel_grid.children) == 12:
+                self.panel_grid.remove_widget(self.panel_grid.children[1])
+                self.panel_grid.remove_widget(self.panel_grid.children[1])
             return False
 
     def _check_number(self, number):
