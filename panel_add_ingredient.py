@@ -50,9 +50,50 @@ class AddIngredient(ScrollView):
         if self._check_values():
             return
 
-        # Popup confirmation before adding ingredient entry into the database.
+        # Confirm ingredient append to database.
+        ingredient_entry = self._pop_up_confirm().reverse()
+
+    def _pop_up_confirm(self):
+        """Creates a popup box for confirming to add to database.
+
+        Popup box contains the summary of the ingredient entry for review.
+        After confirming, the ingredient will then be added to the database.
+        """
+        # Popup instance.
         confirm_popup = ConfirmAdd()
+
+        # References to the panel entries.
+        refs = [
+            self.ids.custom_quaternary_effect.text if \
+            self.ids.quaternary_effect.text == 'Custom' else \
+            self.ids.quaternary_effect.text,
+            self.ids.custom_tertiary_effect.text if \
+            self.ids.tertiary_effect.text == 'Custom' else \
+            self.ids.tertiary_effect.text,
+            self.ids.custom_secondary_effect.text if \
+            self.ids.secondary_effect.text == 'Custom' else \
+            self.ids.secondary_effect.text,
+            self.ids.custom_primary_effect.text if \
+            self.ids.primary_effect.text == 'Custom' else \
+            self.ids.primary_effect.text,
+            self.ids.obtained_at.text,
+            self.ids.weight.text,
+            self.ids.value.text,
+            self.ids.name.text
+            ]
+
+        # Add pop up text values from entries in the follownig order:
+        # quaternary, tertiary, secondary, primary, obtained, weight, value,
+        # and name.
+        labels = confirm_popup.contents.pop_up_labels.children[1:-1]
+        for x, i in enumerate(labels):
+            i.text = i.text + refs[x]
+
+        # Open pop up.
         confirm_popup.open()
+
+        # Return refs.
+        return refs
 
     def _check_values(self):
         """Checks all of the input values of the panel.
