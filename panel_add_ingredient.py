@@ -41,8 +41,19 @@ class AddIngredient(ScrollView):
         pass
 
     def _reset_entries(self):
-        """Removes and resets all the panel's entries."""
-        pass
+        """Resets all the panel's entries manually."""
+        self.ids.name.text = ''
+        self.ids.value.text = ''
+        self.ids.weight.text = ''
+        self.ids.obtained_at.text = ''
+        self.ids.primary_effect.text = 'Primary Effect'
+        self.ids.secondary_effect.text = 'Secondary Effect'
+        self.ids.tertiary_effect.text = 'Tertiary Effect'
+        self.ids.quaternary_effect.text = 'Quaternary Effect'
+        self.ids.custom_primary_effect.text = ''
+        self.ids.custom_secondary_effect.text = ''
+        self.ids.custom_tertiary_effect.text = ''
+        self.ids.custom_quaternary_effect.text = ''
 
     def add_ingredient(self):
         """Compiles and add the input values of the panel."""
