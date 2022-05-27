@@ -29,7 +29,7 @@ class IngredientsDataPanel(ScrollView):
         api = ParseQuery()
         grid_layout = self.panel_grid
         color_a, color_b = '#93c47d', '#76a5af'
-        for x, i in enumerate(api.word_pool):
+        for x, i in enumerate(api.ingredient_names):
             if x%2 == 0:
                 self._add_ingredient(grid_layout, color_a, i)
             else:

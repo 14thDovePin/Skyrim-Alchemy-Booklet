@@ -2,10 +2,42 @@ import sqlite3
 
 
 class ParseQuery:
-    """Manages talking with the SQLite3 database."""
+    """Manage data and communication with the database."""
 
     def __init__(self):
-        """Creates a connection to the database and pulls in data."""
+        """Pull data in from the database and make it as an attribute.
+
+        Class Attributes
+        ----------------
+        data_pool: list
+            A list of all the items from the 2 tables of the database, with
+            each item structured as a list.
+        ingredient_names: list
+            A list of all the NAME values of the data_pool.
+
+        Notes
+        -----
+            The Class Attributes are purposed to be used as an object attribute
+        in any part of the program where the data from the database is needed.
+        It is recommended to keep the communication and management of the
+        program with the database inside this class, to promote a clean code
+        environment and structure.
+
+        Database Structure
+        ------------------
+        The database has 2 tables:
+            INGREDIENTS
+            CUSTOM_INGREDIENTS
+        With each table consisting of the same 8 columns from left to right:
+            NAME
+            VALUE
+            WEIGHT
+            OBTAINED_AT
+            PRIMARY_EFFECT
+            SECONDARY_EFFECT
+            TERTIARY_EFFECT
+            QUATERNARY_EFFECT
+        """
         # Connection & cursor object for "skyrim_ingredients.db".
         self.con = sqlite3.connect("skyrim_ingredients.db")
         self.cur = self.con.cursor()
@@ -15,18 +47,14 @@ class ParseQuery:
         self._pull_data()
 
     def _pull_data(self):
-        """Pulls data in from the database.
+        """Extension of the constructor.
 
-        Data is stored in 2 class variables:
-        data_pool:
-            Contains all the values of each row inside "INGREDIENTS" table from 
-            "skyrim_ingredients.db", with each row structured as a list.
-        word_pool:
-            Contains all the NAME value of each row inside "INGREDIENTS" table.
+        Read more details from the "__doc__" of the class' "__init__" method.
         """
         self.data_pool = []
-        self.word_pool = []
+        self.ingredient_names = []
 
+        # TODO: Code currently is not true to docs of "__init__" method.
         # Convert item's data type into string before appending to data_pool.
         for i in self.cur.execute("SELECT * FROM INGREDIENTS"):
             i = list(i)
@@ -36,7 +64,18 @@ class ParseQuery:
                     i.insert(index, str(item))
 
             self.data_pool.append(i)
-            self.word_pool.append(i[0])  # NAME value at index 0.
+            self.ingredient_names.append(i[0])  # NAME value at index 0.
+
+    def add_ingredient(self, ingredient_entry):
+        """Add and commit an ingredient entry.
+
+        Arguement
+        ---------
+        ingredient_entry: list
+            A list that contains the data for the ingredient that will be
+            appended to the database.
+        """
+        pass
 
     def search_suggestions(self, qeury_text):
         """Returns a list of ingredients name search suggestions."""
@@ -44,7 +83,7 @@ class ParseQuery:
         qtext = qeury_text.lower().replace(' ', '')
 
         if qtext:
-            for item in self.word_pool:
+            for item in self.ingredient_names:
                 if qtext in item.lower().replace(' ', ''):
                     items.append(item)
 
@@ -53,7 +92,7 @@ class ParseQuery:
     def update_idx_key(self, qeury_text):
         """Updates/sets the index key to be used to pull data from data_pool.
         """
-        for x, item in enumerate(self.word_pool):
+        for x, item in enumerate(self.ingredient_names):
             if qeury_text.lower().replace(' ', '') == \
             item.lower().replace(' ', ''):
                 self.index_key = x

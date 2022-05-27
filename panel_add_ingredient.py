@@ -1,6 +1,3 @@
-import weakref
-
-
 from kivy.metrics import dp
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
@@ -36,10 +33,6 @@ class AddIngredient(ScrollView):
         effects.insert(0, 'Custom')
         return effects
 
-    def cancel(self):
-        """Toggles the page."""
-        pass
-
     def _reset_entries(self):
         """Resets all the panel's entries manually."""
         self.ids.name.text = ''
@@ -62,7 +55,22 @@ class AddIngredient(ScrollView):
             return
 
         # Confirm ingredient append to database.
-        ingredient_entry = self._pop_up_confirm().reverse()
+        ingredient_entry = self._pop_up_confirm()[::-1]
+
+        # Process ingredient entry's data types into their designated type
+        # in preparation for adding it to the database.
+        ingredient_entry = [
+            ingredient_entry[0],  # Name
+            round(float(ingredient_entry[1])),  # Value
+            float(ingredient_entry[2]),  # Weight
+            ingredient_entry[3],  # Obtained at
+            ingredient_entry[4],  # Primary Effect
+            ingredient_entry[5],  # Secondary Effect
+            ingredient_entry[6],  # Tertiary Effect
+            ingredient_entry[7],  # Quaternary Effect
+            ]
+
+        # Call function to add ingredient_entry to add it to the database.
 
     def _pop_up_confirm(self):
         """Creates a popup box for confirming to add to database.
@@ -89,7 +97,7 @@ class AddIngredient(ScrollView):
             self.ids.primary_effect.text,
             self.ids.obtained_at.text,
             self.ids.weight.text,
-            self.ids.value.text,
+            str(round(float(self.ids.value.text))),
             self.ids.name.text
             ]
 
