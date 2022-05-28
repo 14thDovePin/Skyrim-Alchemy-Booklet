@@ -5,26 +5,41 @@ class ParseQuery:
     """Manage data and communication with the database."""
 
     def __init__(self):
-        """Pull data in from the database and make it as an attribute.
+        """Pull data in from the database and make it its own attribute.
+
+        Class Attributes
+        ----------------
+        search_key: string
+            The key used to return the correct set of data.
+        """
+        # Create a connection and cursor to the database.
+        self.con = sqlite3.connect("skyrim_ingredients.db")
+        self.cur = self.con.cursor()
+        self.search_key = None
+
+        self._pull_data()
+
+    def _pull_data(self):
+        """Extension of the constructor. Pull data from the database.
 
         Class Attributes
         ----------------
         data_pool: list
-            A list of all the items from the 2 tables of the database, with
+            Contains all the items from the 2 tables of the database, with
             each item structured as a list.
         ingredient_names: list
-            A list of all the NAME values of the data_pool.
+            Contains all the NAME values of the data_pool attribute.
 
         Notes
         -----
             The Class Attributes are purposed to be used as an object attribute
         in any part of the program where the data from the database is needed.
-        It is recommended to keep the communication and management of the
-        program with the database inside this class, to promote a clean code
-        environment and structure.
+        It is recommended to keep the communication and data management of the
+        program with the database inside this class, to promote a clean working
+        environment and code structure.
 
         Database Structure
-        ------------------
+
         The database has 2 tables:
             INGREDIENTS
             CUSTOM_INGREDIENTS
@@ -38,102 +53,154 @@ class ParseQuery:
             TERTIARY_EFFECT
             QUATERNARY_EFFECT
         """
-        # Connection & cursor object for "skyrim_ingredients.db".
-        self.con = sqlite3.connect("skyrim_ingredients.db")
-        self.cur = self.con.cursor()
-
-        self.index_key = None
-
-        self._pull_data()
-
-    def _pull_data(self):
-        """Extension of the constructor.
-
-        Read more details from the "__doc__" of the class' "__init__" method.
-        """
         self.data_pool = []
         self.ingredient_names = []
 
-        # TODO: Code currently is not true to docs of "__init__" method.
-        # Convert item's data type into string before appending to data_pool.
-        for i in self.cur.execute("SELECT * FROM INGREDIENTS"):
-            i = list(i)
-            for index, item in enumerate(i[:]):
+        # Pull data from the INGREDIENTS table of the database.
+        for row in self.cur.execute("SELECT * FROM INGREDIENTS"):
+            row = list(row)
+            for index, item in enumerate(row[:]):
                 if type(item) is not str:
-                    i.pop(index)
-                    i.insert(index, str(item))
+                    row.pop(index)
+                    row.insert(index, str(item))
 
-            self.data_pool.append(i)
-            self.ingredient_names.append(i[0])  # NAME value at index 0.
+            self.data_pool.append(row)
+            self.ingredient_names.append(row[0])  # NAME column at index 0.
+
+        # Pull data from the CUSTOM_INGREDIENTS table of the database.
+        for row in self.cur.execute("SELECT * FROM CUSTOM_INGREDIENTS"):
+            row = list(row)
+            for index, item in enumerate(row[:]):
+                if type(item) is not str:
+                    row.pop(index)
+                    row.insert(index, str(item))
+
+            self.data_pool.append(row)
+            self.ingredient_names.append(row[0])  # NAME column at index 0.
 
     def add_ingredient(self, ingredient_entry):
-        """Add and commit an ingredient entry.
+        """Add and commit a custom ingredient entry to the database.
 
-        Arguement
-        ---------
+        Argument
+        --------
         ingredient_entry: list
-            A list that contains the data for the ingredient that will be
-            appended to the database.
+            Contains the entry values of the "Add Ingredient" panel.
+
+        Notes
+        -----
+        ADD_DESCRIPTION
         """
         pass
 
     def search_suggestions(self, qeury_text):
-        """Returns a list of ingredients name search suggestions."""
-        items = []
+        """Return a list of search suggestions.
+
+        Argument
+        --------
+        query_text: string
+            The text inside the input box of the search bar.
+
+        Notes
+        -----
+        The list returned contains the possible ingredient names that is
+        determined by seeing if an ingredient name contains the characters or
+        text of the qeury_text argument. If such characters or text is found in
+        the ingredient name, this name will be appended to the list that is
+        returned.
+        """
+        suggestions = []
         qtext = qeury_text.lower().replace(' ', '')
 
         if qtext:
             for item in self.ingredient_names:
                 if qtext in item.lower().replace(' ', ''):
-                    items.append(item)
+                    suggestions.append(item)
 
-        return items
+        return suggestions
 
     def update_idx_key(self, qeury_text):
-        """Updates/sets the index key to be used to pull data from data_pool.
+        """Set the new value of the search_key attribute.
+
+        Argument
+        --------
+        query_text: string
+            The current text inside the input box of the search bar.
+
+        Notes
+        -----
+        The search_key is used in the class' "details", "effects", and "tabs"
+        method to set the correct data to be returned when called.
         """
         for x, item in enumerate(self.ingredient_names):
             if qeury_text.lower().replace(' ', '') == \
             item.lower().replace(' ', ''):
-                self.index_key = x
+                self.search_key = x
 
     def details(self):
-        """Returns the item from data_pool.
+        """Return the searched item from the data_pool attribute.
 
-        Returns an item from data pool with a specific index set before.
+        Notes
+        -----
+        The item returned will just be a list from the data_pool attribute with
+        its specified index set by the search_key class attribute.
         """
-        return self.data_pool[self.index_key]
+        return self.data_pool[self.search_key]
 
     def effects(self):
-        """Returns the list of effects.
+        """Return a list of other ingredients with similar effects.
 
-        The nested list has the following structure:
-        [[Ingredient 1, ..2, ..3, Ingredient N],  # Primary Effect
-            [Ingredient 1, ..2, ..3, Ingredient N],  # Secondary Effect
-            [Ingredient 1, ..2, ..3, Ingredient N],  # Tertiary Effect
-            [Ingredient 1, ..2, ..3, Ingredient N]  # Quaternary Effect
-            ]
+        Notes
+        -----
+        For simplicity let us refer to the main ingredient as the ingredient
+        searched by the user.
+
+        The list consists of 4 sublists that that are specified as primary,
+        secondary, tertiary, and quaternary. All pertaining to the main
+        ingredient's 4 effects. Therefor the contents one of these sublist is
+        an ingredient name from the database with the same effect found in the
+        main ingredient.
+
+        As an example, if the main ingredient is "Chicken's Egg", it's four
+        effects from primary to quaternary are: "Resist Magic", "Damage Magicka
+        Regen", "Waterbreathing", and "Lingering Damage Stamina".
+
+        Its primary effect is "Resist Magic" so lets say an ingredient is found
+        that has "Resist Magic" as their tertiary effect. It doesn't matter if
+        the effect of the said ingredeint is at their secondary or tertiary. As
+        long as they have the resist magic effect, its ingredient name will be
+        appended to the primary sublist. This is because we tied things to the
+        effects of the main ingredient, i. e. resist magic is set to be the
+        primary sub list because it is the main ingredient's primary effect.
+        Therefore all the ingredients with the same effect will be found here.
+        All is the same for the secondary, tertiary, and quaternary sublists.
         """
         primary, secondary, tertiary, quaternary = [], [], [], []
 
         for x, y in enumerate(self.data_pool):
             for i in y:
-                if i == self.data_pool[self.index_key][4]:
+                if i == self.data_pool[self.search_key][4]:
                     primary.append(self.data_pool[x][0])
-                if i == self.data_pool[self.index_key][5]:
+                if i == self.data_pool[self.search_key][5]:
                     secondary.append(self.data_pool[x][0])
-                if i == self.data_pool[self.index_key][6]:
+                if i == self.data_pool[self.search_key][6]:
                     tertiary.append(self.data_pool[x][0])
-                if i == self.data_pool[self.index_key][7]:
+                if i == self.data_pool[self.search_key][7]:
                     quaternary.append(self.data_pool[x][0])
 
         return [primary, secondary, tertiary, quaternary]
 
     def tabs(self):
-        """Returns the list of tab names."""
-        primary = self.data_pool[self.index_key][4]
-        secondary = self.data_pool[self.index_key][5]
-        tertiary = self.data_pool[self.index_key][6]
-        quaternary = self.data_pool[self.index_key][7]
+        """Return a list of tab names.
+
+        Notes
+        -----
+        The list returned is just the list of the searched ingredient's four
+        effects namely: Primary Effect, Secondary Effect, Tertiary Effect, and
+        Quaternary Effect accordingly.
+        """
+        primary = self.data_pool[self.search_key][4]
+        secondary = self.data_pool[self.search_key][5]
+        tertiary = self.data_pool[self.search_key][6]
+        quaternary = self.data_pool[self.search_key][7]
 
         return [primary, secondary, tertiary, quaternary]

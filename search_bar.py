@@ -22,12 +22,12 @@ class SearchBar(GridLayout):
         self.parent.parent.parent.scrollview_suggestions_box.\
         suggestions_box.clear_widgets()
 
-        if not type(self.api.index_key) == type(None):
+        if not type(self.api.search_key) == type(None):
             self.parent.parent.results_panel.update_details_panel\
             (self.api.details())
             self.parent.parent.results_panel.update_tab_names(self.api.tabs())
             self._update_effects(self.api.effects())
-            self.api.index_key = None  # Resets index_key for resetting panels.
+            self.api.search_key = None  # Resets index_key for resetting panels.
 
         else:
             self.parent.parent.results_panel.reset_panels()
