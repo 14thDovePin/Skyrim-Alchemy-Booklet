@@ -1,12 +1,12 @@
 from kivy.clock import Clock
 from kivy.uix.scrollview import ScrollView
-from kv_py_ref import SearchBoxButton
+from front_panel import SearchBoxButton
 
 
-from app_api import ParseQuery
+from db_api import Database
 
 
-class IngredientsDataPanel(ScrollView):
+class ManageIngredientsPanel(ScrollView):
     """A page interface for managing the app's database.
 
     Page contains the list of all ingredients stored inside the database.
@@ -26,7 +26,7 @@ class IngredientsDataPanel(ScrollView):
 
     def update_contents(self):
         """Updates the content inside of the page."""
-        api = ParseQuery()
+        api = Database()
         grid_layout = self.panel_grid
         color_a, color_b = '#93c47d', '#76a5af'
         for x, i in enumerate(api.ingredient_names):
@@ -66,22 +66,22 @@ class IngredientsDataPanel(ScrollView):
         text: string
             The string that will be passed to search the ingredient.
         """
-        self.parent.front_widget.search_bar.suggestion_search(text)
+        self.parent.front_panel.search_bar.suggestion_search(text)
         self.toggle_page()
 
-    from toggle_page import toggle_page as tp
+    from py_templates import toggle_page as tp
 
     def toggle_page(self):
         """Extension of toggle_page method."""
         self.tp()
 
-        # Hide/show "ReturnButton" of "panel_ingredients_data.kv".
+        # Hide/show "ReturnButton" of "manage_ingredients_panel.kv".
         if self.parent.return_button.shown:
             self.parent.return_button.shown = False
         else:
             self.parent.return_button.shown = True
 
-        # Hide/show "AddIngredientButton" of "panel_ingredients_data.kv".
+        # Hide/show "AddIngredientButton" of "manage_ingredients_panel.kv".
         if self.parent.add_ingredient_button.shown:
             self.parent.add_ingredient_button.shown = False
         else:

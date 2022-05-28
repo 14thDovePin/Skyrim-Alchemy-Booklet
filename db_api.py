@@ -1,7 +1,7 @@
 import sqlite3
 
 
-class ParseQuery:
+class Database:
     """Manage data and communication with the database."""
 
     def __init__(self):
@@ -32,9 +32,9 @@ class ParseQuery:
 
         Notes
         -----
-            The Class Attributes are purposed to be used as an object attribute
-        in any part of the program where the data from the database is needed.
-        It is recommended to keep the communication and data management of the
+        The Class Attributes are purposed to be used as an object attribute in
+        any part of the program where the data from the database is needed. It
+        is recommended to keep the communication and data management of the
         program with the database inside this class, to promote a clean working
         environment and code structure.
 

@@ -7,32 +7,40 @@ from kivy.clock import Clock
 from kivy.lang import Builder
 
 
-from menu_button import Menu
-from panel_add_ingredient import AddIngredient
-from panel_application_info import AppInfo
-from panel_front_page import FrontWidget
-from panel_ingredients_data import IngredientsDataPanel
-from results_tab_panel import ResultsTabPanel
-from search_bar import SearchBar
+from overlays import MenuButton
+from add_ingredient_panel import AddIngredientPanel
+from application_info_panel import ApplicationInfoPanel
+from manage_ingredients_panel import ManageIngredientsPanel
+
+
+# NOTE: Temporary Indent
+from front_panel import FrontPanel, SearchBar, Results
 
 
 class AlchemyBooklet(App):
     """Kivy App object."""
 
     def __init__(self, **kwargs):
-        """Initializes Kivy app prerequisites."""
+        """Set widget presets before and after 1 kivy life cycle.
+
+        Notes
+        -----
+        Many of the presets for the widgets are set after Kivy loads and
+        initializes the widgets on its first cycle. Therefore we run it with
+        after some cycles.
+        """
         super().__init__(**kwargs)
 
-        """Loads and initializes the main widget tree and set its presets."""
-        self.main = Builder.load_file('root_widget.kv')
+        # Load widget tree with custom kv file name.
+        self.main = Builder.load_file('root.kv')
 
-        # Sets default values to tabs and panels.
-        self.main.front_widget.results_panel.reset_panels()
+        # Reset front_panel widgets.
+        self.main.front_panel.results_panel.reset_panels()
 
         # Explicit update of ingredients panel 4th line parameters.
-        self.main.front_widget.results_panel.ingredient_details_panel.line4.\
+        self.main.front_panel.results_panel.ingredient_details_panel.line4.\
         name.halign = 'left'
-        self.main.front_widget.results_panel.ingredient_details_panel.line4.\
+        self.main.front_panel.results_panel.ingredient_details_panel.line4.\
         value.halign = 'left'
 
         # Run post kivy initialization code block.
@@ -44,19 +52,19 @@ class AlchemyBooklet(App):
             )
 
     def _post_update(self):
-        """Runs after kivy's widget tree initialization."""
+        """Extension of the constructor with delayed schedule."""
 
-        # Fixes custom tab width of "ResultsTabPanel" at "panel_front_page.kv".
-        self.main.front_widget.results_panel.on_tab_width()
+        # Explicit call of function for custom tab.
+        self.main.front_panel.results_panel.on_tab_width()
 
-        # For initial setup of menu drop box width.
-        self.main.menu.toggle_box_drop()
+        # Set menu drop box width.
+        self.main.menu_button.toggle_box_drop()
 
     def _constant_updates(self):
         """Code block that is constantly looped 60 times per second."""
 
         # Size & pos update of object id 'debug_button' of "RootWidget" at
-        # "root_widget.kv".
+        # "root.kv".
         self.main.debug_button.size = self.main.debug_button.texture_size
         self.main.debug_button.x = self.main.x
         if self.main.debug_button.shown:
@@ -64,32 +72,32 @@ class AlchemyBooklet(App):
         else:
             self.main.debug_button.top = self.main.y - 10
 
-        # Size & pos update of "FrontWidget" rule at "panel_front_page.kv".
-        self.main.front_widget.pos = self.main.pos
-        self.main.front_widget.size = self.main.size
+        # Size & pos update of "FrontPanel" rule at "front_panel.kv".
+        self.main.front_panel.pos = self.main.pos
+        self.main.front_panel.size = self.main.size
 
-        # Size & pos update of "AppInfo" at "panel_application_info.kv".
-        self.main.app_info.size = self.main.size
-        if self.main.app_info.shown:
-            self.main.app_info.pos = self.main.pos
+        # Size & pos update of "ApplicationInfoPanel" at "application_info_panel.kv".
+        self.main.app_info_panel.size = self.main.size
+        if self.main.app_info_panel.shown:
+            self.main.app_info_panel.pos = self.main.pos
         else:
-            self.main.app_info.top = self.main.y - 10
+            self.main.app_info_panel.top = self.main.y - 10
 
-        # Size & pos update of "IngredientsDataPanel" at 
-        # "panel_ingredients_data.kv".
-        self.main.ingredients_data_panel.width = self.main.width
-        self.main.ingredients_data_panel.height = self.main.height - \
+        # Size & pos update of "ManageIngredientsPanel" at 
+        # "manage_ingredients_panel.kv".
+        self.main.manage_ingredients_panel.width = self.main.width
+        self.main.manage_ingredients_panel.height = self.main.height - \
         self.main.add_ingredient_button.height
-        self.main.ingredients_data_panel.x = self.main.x
-        if self.main.ingredients_data_panel.shown:
-            self.main.ingredients_data_panel.top = self.main.top
+        self.main.manage_ingredients_panel.x = self.main.x
+        if self.main.manage_ingredients_panel.shown:
+            self.main.manage_ingredients_panel.top = self.main.top
         else:
-            self.main.ingredients_data_panel.top = self.main.y - 10
+            self.main.manage_ingredients_panel.top = self.main.y - 10
 
         # Size & pos update of "ReturnButton" at 
-        # "panel_ingredients_data.kv".
+        # "manage_ingredients_panel.kv".
         self.main.return_button.width = \
-        self.main.ingredients_data_panel.panel_grid.width*1/6
+        self.main.manage_ingredients_panel.panel_grid.width*1/6
         self.main.return_button.height = \
         self.main.return_button.texture_size[1]
         self.main.return_button.right = self.main.right
@@ -98,8 +106,8 @@ class AlchemyBooklet(App):
         else:
             self.main.return_button.top = self.main.y - 10
 
-        # Size & pos update of "AddIngredient" at 
-        # "panel_add_ingredient.kv".
+        # Size & pos update of "AddIngredientPanel" at 
+        # "add_ingredient_panel.kv".
         self.main.add_ingredient_panel.size = self.main.size
         self.main.add_ingredient_panel.x = self.main.x
         if self.main.add_ingredient_panel.shown:
@@ -107,12 +115,12 @@ class AlchemyBooklet(App):
         else:
             self.main.add_ingredient_panel.top = self.main.y - 10
 
-        # Height update of 'note_text' of "panel_add_ingredient.kv".
+        # Height update of 'note_text' of "add_ingredient_panel.kv".
         self.main.add_ingredient_panel.ids.note_text.height = \
         self.main.add_ingredient_panel.ids.note_text.texture_size[1]
 
         # Height, width, and text_size update of the error labels of
-        # "_check_values" of "AddIngredint" of "panel_add_ingredient.py".
+        # "_check_values" of "AddIngredint" of "add_ingredient_panel.py".
         if self.main.add_ingredient_panel.error_label:
             self.main.add_ingredient_panel.panel_grid.children[1].height = \
             self.main.add_ingredient_panel.panel_grid.children[1].\
@@ -123,7 +131,7 @@ class AlchemyBooklet(App):
             = self.main.width
 
         # Size & pos update of "AddIngredientButton" at 
-        # "panel_ingredients_data.kv".
+        # "manage_ingredients_panel.kv".
         self.main.add_ingredient_button.width = self.main.width
         self.main.add_ingredient_button.height = \
         self.main.add_ingredient_button.texture_size[1]
@@ -134,34 +142,34 @@ class AlchemyBooklet(App):
             self.main.add_ingredient_button.top = self.main.y - 10
 
         # Scrollview suggestion box width update.
-        self.main.scrollview_suggestions_box.width = \
-        self.main.front_widget.search_bar.search_text_input.width
+        self.main.search_suggestions_box.width = \
+        self.main.front_panel.search_bar.search_text_input.width
 
         # Scrollview suggestion box height update.
         set_height = self.main.height - abs(self.main.height - \
-        self.main.front_widget.search_bar.search_text_input.y)
+        self.main.front_panel.search_bar.search_text_input.y)
         min_height = \
-        self.main.scrollview_suggestions_box.suggestions_box.minimum_height
+        self.main.search_suggestions_box.suggestions_box.minimum_height
 
         if  min_height < set_height:
-            self.main.scrollview_suggestions_box.height = min_height
+            self.main.search_suggestions_box.height = min_height
         else:
-            self.main.scrollview_suggestions_box.height = set_height
+            self.main.search_suggestions_box.height = set_height
 
         # Scrollview suggestion box position update.
-        self.main.scrollview_suggestions_box.top = \
-        self.main.front_widget.search_bar.search_text_input.y
+        self.main.search_suggestions_box.top = \
+        self.main.front_panel.search_bar.search_text_input.y
 
         # Suggestions update.
-        self.main.front_widget.search_bar.update_suggestions()
+        self.main.front_panel.search_bar.update_suggestions()
 
         # Menu button position update.
-        self.main.menu.top = self.main.top
-        self.main.menu.right =  self.main.right
+        self.main.menu_button.top = self.main.top
+        self.main.menu_button.right =  self.main.right
 
         # Menu drop box position update.
-        self.main.scrollview_menu_drop_box.top = self.main.menu.y
-        self.main.scrollview_menu_drop_box.right = self.main.right
+        self.main.menu_drop_box.top = self.main.menu_button.y
+        self.main.menu_drop_box.right = self.main.right
 
     def build(self):
         return self.main

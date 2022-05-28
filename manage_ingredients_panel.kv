@@ -1,4 +1,4 @@
-#:include rd_templates.kv
+#:include kv_templates.kv
 
 
 # repetative code @ panel_applicatoin_info.kv
@@ -13,7 +13,7 @@
     markup: True
     text: "[b][size=16dp]Return.."
     padding: 0, 15
-    on_release: self.parent.ingredients_data_panel.toggle_page()
+    on_release: self.parent.manage_ingredients_panel.toggle_page()
     # Other attributes are set or updated at "main.py" > "AlchemyBooklet" >
     # "_post_update".
 
@@ -28,7 +28,7 @@
     # "_post_update".
 
 
-<IngredientsDataPanel>:
+<ManageIngredientsPanel>:
     shown: False   # For hiding and showing the page.
     # Other attributes are set or updated at "main.py" > "AlchemyBooklet" >
     # "_post_update".

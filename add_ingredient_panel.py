@@ -2,24 +2,21 @@ from kivy.metrics import dp
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.scrollview import ScrollView
-from app_api import ParseQuery
+from db_api import Database
 
 
-from kv_py_ref import ConfirmAdd
-
-
-class AddIngredient(ScrollView):
+class AddIngredientPanel(ScrollView):
     """A panel for adding an ingredient to the database."""
 
     def __init__(self, **kwargs):
         """Initiates object to communicate with the database."""
         super().__init__(**kwargs)
-        self.api = ParseQuery()
+        self.api = Database()
 
         # For updating the "error_label" of "_check_values" when it is present.
         self.error_label = False
 
-    from toggle_page import toggle_page
+    from py_templates import toggle_page
 
     def return_effects(self):
         """Returns the all list of ingredient's effects from the database."""
@@ -104,7 +101,7 @@ class AddIngredient(ScrollView):
         # Add pop up text values from entries in the follownig order:
         # quaternary, tertiary, secondary, primary, obtained, weight, value,
         # and name.
-        labels = confirm_popup.contents.pop_up_labels.children[1:-1]
+        labels = confirm_popup.pop_up_labels.children[1:-1]
         for x, i in enumerate(labels):
             i.text = i.text + refs[x]
 
@@ -246,7 +243,7 @@ class AddIngredient(ScrollView):
                 self.panel_grid.add_widget(error_title, 1)
                 self.panel_grid.add_widget(error_label, 1)
 
-                # Set the "error_label" atribute of "AddIngredient" class to
+                # Set the "error_label" atribute of "AddIngredientPanel" class to
                 # True to enable the label's height update at
                 # "_constant_updates" of "AlchemyBooklet" of "main.py".
                 self.error_label = True
@@ -273,3 +270,8 @@ class AddIngredient(ScrollView):
             return False
         except ValueError:
             return True
+
+
+class ConfirmAdd(Popup):
+    """Popup confirmation when adding an ingredient to the database."""
+    pass

@@ -1,0 +1,55 @@
+#:kivy 2.0.0
+#:include add_ingredient_panel.kv
+#:include application_info_panel.kv
+#:include front_panel.kv
+#:include manage_ingredients_panel.kv
+#:include kv_templates.kv
+#:include overlays.kv
+
+# NOTE: Sort imports alphabetically.
+
+
+RootWidget:
+
+
+<RootWidget@Widget>:
+    front_panel: front_panel
+    menu_button: menu_button
+    menu_drop_box: menu_drop_box
+    manage_ingredients_panel: manage_ingredients_panel
+    return_button: return_button
+    add_ingredient_button: add_ingredient_button
+    add_ingredient_panel: add_ingredient_panel
+    app_info_panel: app_info_panel
+    search_suggestions_box: search_suggestions_box
+    debug_button: debug_button
+
+    FrontPanel:
+        id: front_panel
+
+    MenuButton:
+        id: menu_button
+
+    MenuDropBox:
+        id: menu_drop_box
+
+    ManageIngredientsPanel:
+        id: manage_ingredients_panel
+
+    ReturnButton:  # For ManageIngerdientsPanel
+        id: return_button
+
+    AddIngredientButton:
+        id: add_ingredient_button
+
+    AddIngredientPanel:
+        id: add_ingredient_panel
+
+    ApplicationInfoPanel:
+        id: app_info_panel
+
+    SearchSuggestionsBox:
+        id: search_suggestions_box
+
+    DebugButton:
+        id: debug_button

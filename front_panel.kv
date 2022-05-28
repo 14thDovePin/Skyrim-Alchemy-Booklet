@@ -1,7 +1,7 @@
-#:include rd_templates.kv
+#:include kv_templates.kv
 
 
-<FrontWidget>:
+<FrontPanel>:
     cols: 1
     # Other attributes are set or updated at "main.py" > "AlchemyBooklet" >
     # "_post_update".
@@ -34,7 +34,7 @@
             size_hint: 1, None
             height: dp(30)
 
-        ResultsTabPanel:
+        Results:
             id: results_panel
 
 
@@ -59,7 +59,7 @@
         on_release: root.search()
 
 
-<ResultsTabPanel>:
+<Results>:
     do_default_tab: False
     tab_width: None
 
