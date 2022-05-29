@@ -1,7 +1,4 @@
-#:include kv_templates.kv
-
-
-<PanelLabel@Label>:
+<AIP_Label@Label>:
     size_hint_y: None
     height: dp(40)
     markup: True
@@ -10,28 +7,19 @@
     padding: dp(20), dp(0)
 
 
-<MyTextInput@TextInput>:
+<AIP_TextInput@TextInput>:
     size_hint_y: None
     height: dp(30)
     multiline: False
     focus: True
 
 
-<EffectsButton@Button>:
-    size_hint_y: None
-    height: dp(40)
-
-
-<MySpinner@Spinner>:
+<AIP_Spinner@Spinner>:
     size_hint_y: None
     height: dp(30)
 
 
 <AddIngredientPanel>:
-    shown: False   # For hiding and showing the page.
-    # Other attributes are set or updated at "main.py" > "AlchemyBooklet" >
-    # "_post_update".
-
     panel_grid: panel_grid
 
     canvas.before:
@@ -46,26 +34,26 @@
         row_default_height: 0
         id: panel_grid
 
-        PanelLabel:
-            text: "[b][size=24dp]Add Ingredient"
+        AIP_Label:
+            text: r"[b][size=24dp]Add Ingredient"
 
-        MyTextInput:
+        AIP_TextInput:
             id: name
             hint_text: 'Ingredient Name i.e. "Epic Herb"'
 
-        MyTextInput:
+        AIP_TextInput:
             id: value
             hint_text: 'Value i.e. "3"'
 
-        MyTextInput:
+        AIP_TextInput:
             id: weight
             hint_text: 'Weight i.e. "0.2"'
 
-        MyTextInput:
+        AIP_TextInput:
             id: obtained_at
             hint_text: 'Obtained at i.e. "Found near epic mountain."'
 
-        PanelLabel:
+        AIP_Label:
             text: '[b][size=24dp]Effects'
             halign: 'left'
             padding: dp(10), dp(10)
@@ -73,52 +61,52 @@
         MyGrid:
             cols: 2
 
-            MySpinner:
+            AIP_Spinner:
                 id: primary_effect
                 text: 'Primary Effect'
                 values: root.return_effects()
 
-            MySpinner:
+            AIP_Spinner:
                 id: secondary_effect
                 text: 'Secondary Effect'
                 values: root.return_effects()
 
-            MySpinner:
+            AIP_Spinner:
                 id: tertiary_effect
                 text: 'Tertiary Effect'
                 values: root.return_effects()
 
-            MySpinner:
+            AIP_Spinner:
                 id: quaternary_effect
                 text: 'Quaternary Effect'
                 values: root.return_effects()
 
-            MyTextInput:
+            AIP_TextInput:
                 id: custom_primary_effect
                 hint_text: 'Custom Primary Effect'
                 disabled: True if not primary_effect.text == 'Custom' else False
 
-            MyTextInput:
+            AIP_TextInput:
                 id: custom_secondary_effect
                 hint_text: 'Custom Secondary Effect'
                 disabled: True if not secondary_effect.text == 'Custom' else False
 
-            MyTextInput:
+            AIP_TextInput:
                 id: custom_tertiary_effect
                 hint_text: 'Custom Tertiary Effect'
                 disabled: True if not tertiary_effect.text == 'Custom' else False
 
-            MyTextInput:
+            AIP_TextInput:
                 id: custom_quaternary_effect
                 hint_text: 'Custom Quaternary Effect'
                 disabled: True if not quaternary_effect.text == 'Custom' else False
 
-        PanelLabel:
+        AIP_Label:
             text: "[b][size=24dp]Adding Notes.."
             halign: 'left'
             padding: dp(10), dp(10)
 
-        PanelLabel:
+        AIP_Label:
             id: note_text
             text: f"[b][size=18dp]    1. Fill up all the required entries.\n    2. Type your ingredient information neatly and concisely.\n    3. Ingredient name must not be one that is already in the database. This will result in failing to add the ingredient to the database.\n    4. Each time you add a new custom ingredient with a custom effect/s. The effect/s will be added to the list of options inside the dropbox for choosing an effect for the ingredient."
             halign: 'left'
@@ -140,7 +128,7 @@
                 height: dp(40)
                 markup: True
                 text: '[b][size=24dp]Reset Entries'
-                on_release: root._reset_entries()
+                on_release: root.reset_entries()
 
             Button:
                 markup: True

@@ -1,0 +1,74 @@
+# A Button customized to look like a Label but still functions as one.
+<ButtonLabel>:
+    size: self.texture_size
+    text_size: self.size
+    background_color: 0, 0, 0, 0
+    background_down: ''
+    background_normal: ''
+    padding: dp(5), dp(0)
+    markup: True
+
+
+# For dynamic tab width for the TabbedPanel object. Footnote [1]
+<CustomWidthTab@TabbedPanelItem>:
+    width: self.texture_size[0]
+    padding: dp(5), dp(2)
+    size_hint_x: None
+    markup: True
+
+
+# Preset class for "<Results>" in "widget_front.kv".
+<MyGrid@GridLayout>:
+    size_hint_y: None
+    height: self.minimum_height
+    row_default_height: dp(20)
+    cols: 1
+    spacing: dp(0), dp(2)
+
+
+<MyLabel@Label>:  # Predefined Label class for "<NVP>".
+    size_hint: 1, None
+    size: self.texture_size
+    text_size: self.size
+    halign: 'left'
+    padding: dp(5), dp(0)
+    markup: True
+
+
+# Set the orientation of the NVP by either setting its attributes:
+#    "rows: 1" Set the orientation horizontally.
+#    "cols: 1" Set the orientation vertically.
+# Note failure to use either one will result in the widget not being triggerd!
+# As this is just a GridLayout object, see kivy.uix.gridlayout docs for more.
+<NVP@GridLayout>:  # Name Value Pairs.
+    size_hint: 1, None
+    height: self.minimum_height
+    name: name
+    value: value
+
+    MyLabel:
+        id: name
+        size_hint:  1 if self.parent.cols == 1 else None, None if self.parent.cols == 1 else 1
+        text_size: self.width if self.parent.cols == 1 else None, None if self.parent.cols == 1 else self.height
+        halign: 'center' if self.parent.cols == 1 else 'left'
+
+    MyLabel:
+        id: value
+        size_hint: 1, None
+        text_size: self.width, None
+        halign: 'center' if self.parent.cols == 1 else 'left'
+
+
+<TogglePanel>:
+    shown: False  # Doc at "templates.py > TogglePanel"
+
+    canvas.before:
+        Color:
+            rgb: 48/255, 48/255, 48/255
+
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+
+# [1]: https://stackoverflow.com/questions/50990697/python-kivy-tabbedpanel-setting-custom-tab-widths

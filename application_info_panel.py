@@ -7,5 +7,5 @@ class ApplicationInfoPanel(ScrollView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    from py_templates import toggle_page
+    from templates import toggle_page
         

@@ -42,7 +42,7 @@ class SearchBar(GridLayout):
         else:
             self.parent.parent.results_panel.reset_panels()
 
-        # Set current tab to ingredients_details tab. FR: 0003
+        # Set current tab to ingredients_details tab. Footnote [2]
         Clock.schedule_once(lambda dt:
             self.parent.parent.results_panel.switch_to(
             self.parent.parent.results_panel.tab_list[-1]
@@ -73,18 +73,18 @@ class SearchBar(GridLayout):
                 if x%2 == 0:
                     self.parent.parent.parent.search_suggestions_box.\
                     suggestions_box.add_widget(
-                    SearchBoxButton(
+                    ButtonLabel(
                         text = '[color=#AF9BDB][b]'+i+'[/color][/b]',
                         background_color = (62/255, 62/255, 40/255, 1),
                         on_release = lambda ins: self.suggestion_search(
                             ins.text
-                            )  # FR: 0001
+                            )  # Footnote [1]
                         )
                     )
                 else:
                     self.parent.parent.parent.search_suggestions_box.\
                     suggestions_box.add_widget(
-                    SearchBoxButton(
+                    ButtonLabel(
                         text = '[color=#FFEADD][b]'+i+'[/color][/b]',
                         background_color = (62/255, 62/255, 40/255, 1),
                         on_release = lambda ins: self.suggestion_search(
@@ -147,7 +147,7 @@ class Results(TabbedPanel):
         for x, ingredient in enumerate(ingredients):
             if x%2 == 0:
                 panel.add_widget(
-                    SearchBoxButton(
+                    ButtonLabel(
                         text = '[color=#AF9BDB][b]'+ingredient+'[/color][/b]',
                         background_color = (64/255, 64/255, 64/255, 1),
                         on_release = lambda ins: \
@@ -158,7 +158,7 @@ class Results(TabbedPanel):
                     )
             else:
                 panel.add_widget(
-                    SearchBoxButton(
+                    ButtonLabel(
                         text = '[color=#FFEADD][b]'+ingredient+'[/color][/b]',
                         background_color = (64/255, 64/255, 64/255, 1),
                         on_release = lambda ins: \
@@ -262,16 +262,20 @@ class Results(TabbedPanel):
             tab.text = names[x]
 
 
-class SearchBoxButton(Button):
+class ButtonLabel(Button):
     """Use for adding a dynamic number of buttons."""
     pass
 
 
 # TODO: Move this class to its proper file.
-class MenuBoxButton(SearchBoxButton):
+class MenuBoxButton(ButtonLabel):
     """The option button inside the menu drop box."""
 
     def on_release(self):
         """Toggle its parent drop box once selected."""
         # MyGrid > MenuDropBox > RootWidget
         self.parent.parent.parent.menu_button.toggle_box_drop()
+
+
+# [1]: https://stackoverflow.com/questions/64634875/how-can-you-pass-parameters-to-kivy-buttons-bind-functions
+# [2]: https://stackoverflow.com/questions/49050300/kivy-how-to-define-which-tab-is-to-be-active-on-opening-a-tabbedpanel

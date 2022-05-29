@@ -5,16 +5,14 @@ kivy.require('2.0.0')  # Kivy version control (02/02/2022 --latest)
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.lang import Builder
-
-
 from overlays import MenuButton
+
+
 from add_ingredient_panel import AddIngredientPanel
 from application_info_panel import ApplicationInfoPanel
 from manage_ingredients_panel import ManageIngredientsPanel
-
-
-# NOTE: Temporary Indent
 from front_panel import FrontPanel, SearchBar, Results
+# TODO: Sort out imports.
 
 
 class AlchemyBooklet(App):
@@ -106,29 +104,7 @@ class AlchemyBooklet(App):
         else:
             self.main.return_button.top = self.main.y - 10
 
-        # Size & pos update of "AddIngredientPanel" at 
-        # "add_ingredient_panel.kv".
-        self.main.add_ingredient_panel.size = self.main.size
-        self.main.add_ingredient_panel.x = self.main.x
-        if self.main.add_ingredient_panel.shown:
-            self.main.add_ingredient_panel.top = self.main.top
-        else:
-            self.main.add_ingredient_panel.top = self.main.y - 10
-
-        # Height update of 'note_text' of "add_ingredient_panel.kv".
-        self.main.add_ingredient_panel.ids.note_text.height = \
-        self.main.add_ingredient_panel.ids.note_text.texture_size[1]
-
-        # Height, width, and text_size update of the error labels of
-        # "_check_values" of "AddIngredint" of "add_ingredient_panel.py".
-        if self.main.add_ingredient_panel.error_label:
-            self.main.add_ingredient_panel.panel_grid.children[1].height = \
-            self.main.add_ingredient_panel.panel_grid.children[1].\
-            texture_size[1]
-            self.main.add_ingredient_panel.panel_grid.children[1].width \
-            = self.main.width
-            self.main.add_ingredient_panel.panel_grid.children[1].text_size[0]\
-            = self.main.width
+        self.main.add_ingredient_panel.update(self.main)
 
         # Size & pos update of "AddIngredientButton" at 
         # "manage_ingredients_panel.kv".

@@ -1,37 +1,48 @@
+from db_api import Database
 from kivy.metrics import dp
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
-from kivy.uix.scrollview import ScrollView
-from db_api import Database
 
 
-class AddIngredientPanel(ScrollView):
-    """A panel for adding an ingredient to the database."""
+from templates import TogglePanel
+
+
+class AddIngredientPanel(TogglePanel):
+    """A panel for adding an ingredient to the database.
+
+    Methods
+    -------
+    toggle_page (inherited)
+        Toggle visibility of panel on screen.
+    reset_entries
+        Reset all panel ingredient entries.
+    update
+        Update panel assets and attributes.
+    return_effects
+        Return a set list of all the ingredient effects from the database.
+    add_ingredient
+        Check ingredient entry, add it to the database.
+    """
 
     def __init__(self, **kwargs):
-        """Initiates object to communicate with the database."""
-        super().__init__(**kwargs)
+        """Initialize connection with the database.
+
+        Attributes
+        ----------
+        api: Database obj
+            Contains data from database.
+        UPDATE_ERROR_LABELS: bool
+            If True updates the error labels of the panel.
+        """
+        super(TogglePanel, self).__init__(**kwargs)
+        # Pull data from the database.
         self.api = Database()
 
-        # For updating the "error_label" of "_check_values" when it is present.
-        self.error_label = False
+        # Flag for updating the panel's error labels.
+        self.UPDATE_ERROR_LABELS = False
 
-    from py_templates import toggle_page
-
-    def return_effects(self):
-        """Returns the all list of ingredient's effects from the database."""
-        effects = []
-        effects_raw = [i[4:8] for i in self.api.data_pool]
-        for item in effects_raw:
-            for effect in item:
-                effects.append(effect)
-        effects = set(sorted(effects))
-        effects = sorted(list(effects))
-        effects.insert(0, 'Custom')
-        return effects
-
-    def _reset_entries(self):
-        """Resets all the panel's entries manually."""
+    def reset_entries(self):
+        """Reset all the panel entries manually."""
         self.ids.name.text = ''
         self.ids.value.text = ''
         self.ids.weight.text = ''
@@ -45,17 +56,55 @@ class AddIngredientPanel(ScrollView):
         self.ids.custom_tertiary_effect.text = ''
         self.ids.custom_quaternary_effect.text = ''
 
+    def update(self, root):
+        """Update panel assets and attributes.
+
+        Arguments
+        ---------
+        root: kivy obj
+            The root widget of the application.
+        """
+        # Panel size & pos attribute update.
+        self.size = root.size
+        self.x = root.x
+        if self.shown:
+            self.top = root.top
+        else:
+            self.top = root.y - 10
+
+        # Update height of "add_ingredient_panel.kv > id:note_text".
+        self.ids.note_text.height = self.ids.note_text.texture_size[1]
+
+        # If 'UPDATE_ERROR_LABELS' flag is True. Update height, width, and
+        # text_size attributes of the panel's error labels.
+        if self.UPDATE_ERROR_LABELS:
+            self.panel_grid.children[1].height = self.panel_grid.children[1].\
+            texture_size[1]
+            self.panel_grid.children[1].width = root.width
+            self.panel_grid.children[1].text_size[0] = root.width
+
+    def return_effects(self):
+        """Return a set list of all ingredient effects from the database."""
+        effects = []
+        effects_raw = [i[4:8] for i in self.api.data_pool]
+        for item in effects_raw:
+            for effect in item:
+                effects.append(effect)
+        effects = set(sorted(effects))
+        effects = sorted(list(effects))
+        effects.insert(0, 'Custom')
+        return effects
+
     def add_ingredient(self):
-        """Compiles and add the input values of the panel."""
+        """Check the ingredient entry and add it to the database."""
         # Check and return if there are any errors.
         if self._check_values():
             return
 
-        # Confirm ingredient append to database.
+        # Pull ingredient entry and confirm append to database.
         ingredient_entry = self._pop_up_confirm()[::-1]
 
-        # Process ingredient entry's data types into their designated type
-        # in preparation for adding it to the database.
+        # Process ingredient entry's values data type.
         ingredient_entry = [
             ingredient_entry[0],  # Name
             round(float(ingredient_entry[1])),  # Value
@@ -67,65 +116,26 @@ class AddIngredientPanel(ScrollView):
             ingredient_entry[7],  # Quaternary Effect
             ]
 
-        # Call function to add ingredient_entry to add it to the database.
-
-    def _pop_up_confirm(self):
-        """Creates a popup box for confirming to add to database.
-
-        Popup box contains the summary of the ingredient entry for review.
-        After confirming, the ingredient will then be added to the database.
-        """
-        # Popup instance.
-        confirm_popup = ConfirmAdd()
-
-        # References to the panel entries.
-        refs = [
-            self.ids.custom_quaternary_effect.text if \
-            self.ids.quaternary_effect.text == 'Custom' else \
-            self.ids.quaternary_effect.text,
-            self.ids.custom_tertiary_effect.text if \
-            self.ids.tertiary_effect.text == 'Custom' else \
-            self.ids.tertiary_effect.text,
-            self.ids.custom_secondary_effect.text if \
-            self.ids.secondary_effect.text == 'Custom' else \
-            self.ids.secondary_effect.text,
-            self.ids.custom_primary_effect.text if \
-            self.ids.primary_effect.text == 'Custom' else \
-            self.ids.primary_effect.text,
-            self.ids.obtained_at.text,
-            self.ids.weight.text,
-            str(round(float(self.ids.value.text))),
-            self.ids.name.text
-            ]
-
-        # Add pop up text values from entries in the follownig order:
-        # quaternary, tertiary, secondary, primary, obtained, weight, value,
-        # and name.
-        labels = confirm_popup.pop_up_labels.children[1:-1]
-        for x, i in enumerate(labels):
-            i.text = i.text + refs[x]
-
-        # Open pop up.
-        confirm_popup.open()
-
-        # Return refs.
-        return refs
+        # Add ingredient entry to the database.
+        # TODO: Create function to append ingredient to database.
 
     def _check_values(self):
-        """Checks all of the input values of the panel.
+        """Check all the input entry values of the panel.
 
-        If there are any input errors or mishaps. The method will add a label
-        containing all of the information regarding the input errors and
-        mishaps at the panel.
+        Note
+        ----
+        If there are any incorrect or empty inputs. The method will create and
+        add a label where the errors will be printed out on the panel.
+        Returns True if there are any errors, otherwise returns False.
         """
-        # For comparing ingredients name with the database.
+        # Raw ingredients name from the database for input evaluation.
         self.ingredients_name_pool = \
         [i[0].lower().replace(' ','') for i in self.api.data_pool]
-        # For comparing effects with the database.
+        # Raw effects from the database for input evaluation.
         self.effects_pool = \
         [i.lower().replace(' ','') for i in self.return_effects()]
 
-        # Message & references.
+        # Create variable for error message & reference ingredient entries.
         error_messages = ''
         name = self.ids.name.text
         value = self.ids.value.text
@@ -146,6 +156,7 @@ class AddIngredientPanel(ScrollView):
             self.ids.custom_quaternary_effect.text
             ]
 
+        # Set the default values for the panel's Spinner objects.
         default_values = [
             'Primary Effect',
             'Secondary Effect',
@@ -153,76 +164,76 @@ class AddIngredientPanel(ScrollView):
             'Quaternary Effect'
             ]
 
-        # Check IF name input is empty.
+        # Check IF name input entry is empty.
         if not name:
             error_messages = error_messages + \
-                '    Ingredient Name entry cannot be empty!'
+                '    Ingredient Name entry cannot be empty!\n'
 
-        # Check IF name input is NOT in the database.
+        # Check IF name input entry is NOT in the database.
         elif name.lower().replace(' ','') in self.ingredients_name_pool:
             error_messages = error_messages + \
                 '    Ingredient Name entry invalid! Database' + \
-                ' contains an entry with the same name..'
+                ' contains an entry with the same name..\n'
 
-        # Check IF value input is empty.
+        # Check IF value input entry is empty.
         if not value:
             error_messages = error_messages + \
-            '\n    Value entry cannot be empty!'
+            '    Value entry cannot be empty!\n'
 
-        # Check IF value input is NOT a valid number.
+        # Check IF value input entry is NOT a valid number.
         elif self._check_number(value):
             error_messages = error_messages + \
-                '\n    Value entry invalid! Must be a valid number..'
+                '    Value entry invalid! Must be a valid number..\n'
 
-        # Check IF weight input is empty.
+        # Check IF weight input entry is empty.
         if not weight:
             error_messages = error_messages + \
-            '\n    Weight entry cannot be empty!'
+            '    Weight entry cannot be empty!\n'
 
-        # Check IF weight input is NOT a valid number.
+        # Check IF weight input entry is NOT a valid number.
         elif self._check_number(weight):
             error_messages = error_messages + \
-                '\n    Weight entry invalid! Must be a valid number..'
+                '    Weight entry invalid! Must be a valid number..\n'
 
-        # Check IF weight input is empty.
+        # Check IF weight input entry is empty.
         if not obtained_at:
             error_messages = error_messages + \
-            '\n    Obtained at entry cannot be empty!'
+            '    Obtained at entry cannot be empty!\n'
 
-        # Check block for ingredients effects.
+        # Check block for ingredients effects input entry.
         for n, effect in enumerate(base_effects):
 
             # Check IF effect is unchanged.
             if effect == default_values[n]:
                 error_messages = error_messages + \
-                f'\n    Please choose a {default_values[n]}!'
+                f'    Please choose a {default_values[n]}!\n'
 
             # Check IF effect is custom.
             elif effect == 'Custom':
-                # Check if input is empty.
+                # Check if input entry is empty.
                 if not custom_effects[n]:
                     error_messages = error_messages + \
-                    f'\n    Custom {default_values[n]} entry cannot be empty!'
+                    f'    Custom {default_values[n]} entry cannot be empty!\n'
 
-                # Check IF input is NOT in the database
+                # Check IF input entry is NOT in the database
                 elif custom_effects[n].lower().replace(' ','') in \
                 self.effects_pool:
                     error_messages = error_messages + \
-                        f'\n    Custom {default_values[n]} entry invalid! ' + \
+                        f'    Custom {default_values[n]} entry invalid! ' + \
                         'Database contains an entry with the same name.. ' + \
-                        'Please choose it from the selection box instead.'
+                        'Please choose it from the selection box instead.\n'
 
-        # Check IF there are any errors
+        # Check IF there is an error.
         if error_messages:
 
-            # Check IF error labels exists and updates them.
+            # Check IF error labels exist and update them.
             if len(self.panel_grid.children) == 12:
                 self.panel_grid.children[1].text = '[b][size=18dp]' + \
                 error_messages
 
-            # Output errors to panel by using labels.
+            # Create and add the error labels to the panel.
             else:
-                error_title = Label(
+                title = Label(
                     size_hint_y = None,
                     height = dp(40),
                     markup = True,
@@ -231,7 +242,7 @@ class AddIngredientPanel(ScrollView):
                     padding = [dp(20), dp(0)]
                     )
 
-                error_label = Label(
+                error_message = Label(
                     size_hint_y = None,
                     markup = True,
                     text = '[b][size=18dp]' + error_messages,
@@ -239,31 +250,74 @@ class AddIngredientPanel(ScrollView):
                     padding = [dp(20), dp(0)]
                     )
 
-                # Add the 2 labels to the panel.
-                self.panel_grid.add_widget(error_title, 1)
-                self.panel_grid.add_widget(error_label, 1)
+                self.panel_grid.add_widget(title, 1)
+                self.panel_grid.add_widget(error_message, 1)
 
-                # Set the "error_label" atribute of "AddIngredientPanel" class to
-                # True to enable the label's height update at
-                # "_constant_updates" of "AlchemyBooklet" of "main.py".
-                self.error_label = True
+                # Set error labels update flag to True.
+                self.UPDATE_ERROR_LABELS = True
 
             return True
 
-        # Check if error labels still exists and remove them.
+        # Check if error labels exist and remove them.
         else:
             if len(self.panel_grid.children) == 12:
                 self.panel_grid.remove_widget(self.panel_grid.children[1])
                 self.panel_grid.remove_widget(self.panel_grid.children[1])
+            # Set error labels update flag to False.
+            self.UPDATE_ERROR_LABELS = False
             return False
 
+    def _pop_up_confirm(self):
+        """Confirmation popup box when adding an ingredient to the database.
+
+        Pull and return all entry data from the panel. Widget contains the
+        summary of the ingredient entry in a simple format for user review.
+        """
+        # Create pop up widget.
+        confirm_popup = ConfirmAdd()
+
+        # Pull all panel entries.
+        refs = [
+            self.ids.custom_quaternary_effect.text if \
+            self.ids.quaternary_effect.text == 'Custom' else \
+            self.ids.quaternary_effect.text,
+            self.ids.custom_tertiary_effect.text if \
+            self.ids.tertiary_effect.text == 'Custom' else \
+            self.ids.tertiary_effect.text,
+            self.ids.custom_secondary_effect.text if \
+            self.ids.secondary_effect.text == 'Custom' else \
+            self.ids.secondary_effect.text,
+            self.ids.custom_primary_effect.text if \
+            self.ids.primary_effect.text == 'Custom' else \
+            self.ids.primary_effect.text,
+            self.ids.obtained_at.text,
+            self.ids.weight.text,
+            str(round(float(self.ids.value.text))),
+            self.ids.name.text
+            ]
+
+        # Update pop up labels with ingredient entry.
+        labels = confirm_popup.pop_up_labels.children[1:-1]
+        for x, i in enumerate(labels):
+            i.text = i.text + refs[x]
+
+        # Open pop up widget.
+        confirm_popup.open()
+
+        # Return ingredient entry.
+        return refs
+
     def _check_number(self, number):
-        """Checks if the string can be considerd an integer or a float.
+        """Return True if string can be an integer or a float otherwise False.
 
         Arguments
         ---------
         number: string
-        The string that is to be tested if it is a valid number.
+            The string that is processed.
+
+        Notes
+        -----
+        Returns True if check passes, otherwise returns False.
         """
         try:
             float(number)
@@ -273,5 +327,5 @@ class AddIngredientPanel(ScrollView):
 
 
 class ConfirmAdd(Popup):
-    """Popup confirmation when adding an ingredient to the database."""
+    """Add Ingredient pop up widget confirmation box."""
     pass

@@ -1,6 +1,6 @@
 from kivy.clock import Clock
 from kivy.uix.scrollview import ScrollView
-from front_panel import SearchBoxButton
+from front_panel import ButtonLabel
 
 
 from db_api import Database
@@ -36,7 +36,7 @@ class ManageIngredientsPanel(ScrollView):
                 self._add_ingredient(grid_layout, color_b, i)
 
     def _add_ingredient(self, base_widget, color, button_text):
-        """Adds a SearchBoxButton rule to a grid layout.
+        """Adds a ButtonLabel rule to a grid layout.
 
         Arguments
         ---------
@@ -49,7 +49,7 @@ class ManageIngredientsPanel(ScrollView):
         """
         text = f'[color={color.upper()}][b][size=20dp]'+button_text[:]
         base_widget.add_widget(
-            SearchBoxButton(
+            ButtonLabel(
                 size_hint = [1, None],
                 text = text,
                 padding = [5, 5],
@@ -69,7 +69,7 @@ class ManageIngredientsPanel(ScrollView):
         self.parent.front_panel.search_bar.suggestion_search(text)
         self.toggle_page()
 
-    from py_templates import toggle_page as tp
+    from templates import toggle_page as tp
 
     def toggle_page(self):
         """Extension of toggle_page method."""

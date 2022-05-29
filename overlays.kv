@@ -1,5 +1,5 @@
 #:import Factory kivy.factory.Factory
-#:include kv_templates.kv
+
 
 
 <MenuButton>:
@@ -147,8 +147,8 @@
                     padding: dp(50), dp(10)
 
 
-<DebugButton@Button>:  # NOTE: For debugging purposes only!
-    shown: False   # For hiding and showing the button.
+<DebugButton@Button>:  # For debugging purposes only!
+    shown: True   # For hiding and showing the button.
     markup: True
     padding: 5, 12
     text: "[b][size=20dp]Debug Mode"

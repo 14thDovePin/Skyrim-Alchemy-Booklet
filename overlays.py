@@ -41,10 +41,13 @@ class MenuButton(Button):
 class MenuDropBox(ScrollView):
     """The menu drop box that contains options and items."""
 
-    def on_touch_down(self, touch):  # FR: 0004
+    def on_touch_down(self, touch):  # Footnote [1]
         if not self.collide_point(*touch.pos) and \
         not self.parent.menu_button.collide_point(*touch.pos) and \
         self.parent.menu_button.drop_box == 'hidden':
             self.parent.menu_button.toggle_box_drop()
 
         return super(MenuDropBox, self).on_touch_down(touch)
+
+
+# [1]: https://stackoverflow.com/questions/48487175/kivy-scrollview-doesnt-work-with-on-touch-down-method
