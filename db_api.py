@@ -2,7 +2,23 @@ import sqlite3
 
 
 class Database:
-    """Manage data and communication with the database."""
+    """Manage data and communication with the database.
+
+    Methods
+    -------
+    add_ingredient
+        Add and commit a custom ingredient entry to the database.
+    search_suggestions
+        Return a list of search suggestions.
+    update_pull_key
+        Set the new value of the search_key attribute.
+    details
+        Return the searched item from the data_pool attribute.
+    effects
+        Return a list of other ingredients with similar effects.
+    tabs
+        Return a list of tab names.
+    """
 
     def __init__(self):
         """Pull data in from the database and make it its own attribute.
@@ -81,22 +97,22 @@ class Database:
     def add_ingredient(self, ingredient_entry):
         """Add and commit a custom ingredient entry to the database.
 
-        Argument
-        --------
+        Arguments
+        ---------
         ingredient_entry: list
             Contains the entry values of the "Add Ingredient" panel.
 
         Notes
         -----
-        ADD_DESCRIPTION
+        TODO: Add method notes.
         """
         pass
 
     def search_suggestions(self, qeury_text):
         """Return a list of search suggestions.
 
-        Argument
-        --------
+        Arguments
+        ---------
         query_text: string
             The text inside the input box of the search bar.
 
@@ -118,11 +134,11 @@ class Database:
 
         return suggestions
 
-    def update_idx_key(self, qeury_text):
+    def update_pull_key(self, qeury_text):
         """Set the new value of the search_key attribute.
 
-        Argument
-        --------
+        Arguments
+        ---------
         query_text: string
             The current text inside the input box of the search bar.
 

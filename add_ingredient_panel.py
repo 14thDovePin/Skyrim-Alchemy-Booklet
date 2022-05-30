@@ -1,9 +1,9 @@
-from db_api import Database
 from kivy.metrics import dp
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 
 
+from db_api import Database
 from templates import TogglePanel
 
 
@@ -12,11 +12,11 @@ class AddIngredientPanel(TogglePanel):
 
     Methods
     -------
-    toggle_page (inherited)
+    toggle_panel (inherited)
         Toggle visibility of panel on screen.
     reset_entries
         Reset all panel ingredient entries.
-    update
+    update (override)
         Update panel assets and attributes.
     return_effects
         Return a set list of all the ingredient effects from the database.
@@ -34,7 +34,7 @@ class AddIngredientPanel(TogglePanel):
         UPDATE_ERROR_LABELS: bool
             If True updates the error labels of the panel.
         """
-        super(TogglePanel, self).__init__(**kwargs)
+        super(AddIngredientPanel, self).__init__(**kwargs)
         # Pull data from the database.
         self.api = Database()
 
@@ -55,6 +55,7 @@ class AddIngredientPanel(TogglePanel):
         self.ids.custom_secondary_effect.text = ''
         self.ids.custom_tertiary_effect.text = ''
         self.ids.custom_quaternary_effect.text = ''
+        # TODO: Reset error labels too.
 
     def update(self, root):
         """Update panel assets and attributes.
@@ -64,19 +65,20 @@ class AddIngredientPanel(TogglePanel):
         root: kivy obj
             The root widget of the application.
         """
-        # Panel size & pos attribute update.
+        # Update size & pos of the panel.
         self.size = root.size
         self.x = root.x
+
+        # Show or hide the panel.
         if self.shown:
             self.top = root.top
         else:
             self.top = root.y - 10
 
-        # Update height of "add_ingredient_panel.kv > id:note_text".
+        # Update height of "add_ingredient_panel.kv > ADD_Label.id: note_text".
         self.ids.note_text.height = self.ids.note_text.texture_size[1]
 
-        # If 'UPDATE_ERROR_LABELS' flag is True. Update height, width, and
-        # text_size attributes of the panel's error labels.
+        # Check flag. Update attributes of error labels.
         if self.UPDATE_ERROR_LABELS:
             self.panel_grid.children[1].height = self.panel_grid.children[1].\
             texture_size[1]
@@ -97,7 +99,7 @@ class AddIngredientPanel(TogglePanel):
 
     def add_ingredient(self):
         """Check the ingredient entry and add it to the database."""
-        # Check and return if there are any errors.
+        # Check. Return if there are any errors.
         if self._check_values():
             return
 
@@ -128,10 +130,10 @@ class AddIngredientPanel(TogglePanel):
         add a label where the errors will be printed out on the panel.
         Returns True if there are any errors, otherwise returns False.
         """
-        # Raw ingredients name from the database for input evaluation.
+        # Pull raw ingredients name from the database for input evaluation.
         self.ingredients_name_pool = \
         [i[0].lower().replace(' ','') for i in self.api.data_pool]
-        # Raw effects from the database for input evaluation.
+        # Pull raw effects from the database for input evaluation.
         self.effects_pool = \
         [i.lower().replace(' ','') for i in self.return_effects()]
 

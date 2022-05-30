@@ -1,16 +1,4 @@
-"""File contains some of templates.kv file's Python class references and
-also contains other helper/template: functions; methods; classes"""
-
-
 from kivy.uix.scrollview import ScrollView
-
-
-def toggle_page(self):  # TODO: Omit block.
-    """Sets page/panel attribute 'shown' to True if False or otherwise so."""
-    if self.shown:
-        self.shown = False
-    else:
-        self.shown = True
 
 
 class TogglePanel(ScrollView):
@@ -24,8 +12,10 @@ class TogglePanel(ScrollView):
 
     Methods
     -------
-    toggle_page
+    toggle_panel (inherited)
         Toggles page visibility on screen.
+    update (override)
+        Update panel assets and attributes.
 
     Note
     ----
@@ -33,9 +23,9 @@ class TogglePanel(ScrollView):
     """
     def __init__(self, **kwargs):
         """Set class attributes."""
-        super(ScrollView, self).__init__(**kwargs)
+        super(TogglePanel, self).__init__(**kwargs)
 
-    def toggle_page(self):  # TODO: Rename method to "toggle_panel".
+    def toggle_panel(self):
         """Set panel attribute 'shown' to True if False and False if True."""
         if self.shown:
             self.shown = False

@@ -1,4 +1,4 @@
-<AIP_Label@Label>:
+<ADD_Label@Label>:
     size_hint_y: None
     height: dp(40)
     markup: True
@@ -7,14 +7,14 @@
     padding: dp(20), dp(0)
 
 
-<AIP_TextInput@TextInput>:
+<ADD_TextInput@TextInput>:
     size_hint_y: None
     height: dp(30)
     multiline: False
     focus: True
 
 
-<AIP_Spinner@Spinner>:
+<ADD_Spinner@Spinner>:
     size_hint_y: None
     height: dp(30)
 
@@ -22,38 +22,30 @@
 <AddIngredientPanel>:
     panel_grid: panel_grid
 
-    canvas.before:
-        Color:
-            rgb: 48/255, 48/255, 48/255
-
-        Rectangle:
-            size: self.size
-            pos: self.pos
-
     MyGrid:
         row_default_height: 0
         id: panel_grid
 
-        AIP_Label:
+        ADD_Label:
             text: r"[b][size=24dp]Add Ingredient"
 
-        AIP_TextInput:
+        ADD_TextInput:
             id: name
             hint_text: 'Ingredient Name i.e. "Epic Herb"'
 
-        AIP_TextInput:
+        ADD_TextInput:
             id: value
             hint_text: 'Value i.e. "3"'
 
-        AIP_TextInput:
+        ADD_TextInput:
             id: weight
             hint_text: 'Weight i.e. "0.2"'
 
-        AIP_TextInput:
+        ADD_TextInput:
             id: obtained_at
             hint_text: 'Obtained at i.e. "Found near epic mountain."'
 
-        AIP_Label:
+        ADD_Label:
             text: '[b][size=24dp]Effects'
             halign: 'left'
             padding: dp(10), dp(10)
@@ -61,52 +53,52 @@
         MyGrid:
             cols: 2
 
-            AIP_Spinner:
+            ADD_Spinner:
                 id: primary_effect
                 text: 'Primary Effect'
                 values: root.return_effects()
 
-            AIP_Spinner:
+            ADD_Spinner:
                 id: secondary_effect
                 text: 'Secondary Effect'
                 values: root.return_effects()
 
-            AIP_Spinner:
+            ADD_Spinner:
                 id: tertiary_effect
                 text: 'Tertiary Effect'
                 values: root.return_effects()
 
-            AIP_Spinner:
+            ADD_Spinner:
                 id: quaternary_effect
                 text: 'Quaternary Effect'
                 values: root.return_effects()
 
-            AIP_TextInput:
+            ADD_TextInput:
                 id: custom_primary_effect
                 hint_text: 'Custom Primary Effect'
                 disabled: True if not primary_effect.text == 'Custom' else False
 
-            AIP_TextInput:
+            ADD_TextInput:
                 id: custom_secondary_effect
                 hint_text: 'Custom Secondary Effect'
                 disabled: True if not secondary_effect.text == 'Custom' else False
 
-            AIP_TextInput:
+            ADD_TextInput:
                 id: custom_tertiary_effect
                 hint_text: 'Custom Tertiary Effect'
                 disabled: True if not tertiary_effect.text == 'Custom' else False
 
-            AIP_TextInput:
+            ADD_TextInput:
                 id: custom_quaternary_effect
                 hint_text: 'Custom Quaternary Effect'
                 disabled: True if not quaternary_effect.text == 'Custom' else False
 
-        AIP_Label:
+        ADD_Label:
             text: "[b][size=24dp]Adding Notes.."
             halign: 'left'
             padding: dp(10), dp(10)
 
-        AIP_Label:
+        ADD_Label:
             id: note_text
             text: f"[b][size=18dp]    1. Fill up all the required entries.\n    2. Type your ingredient information neatly and concisely.\n    3. Ingredient name must not be one that is already in the database. This will result in failing to add the ingredient to the database.\n    4. Each time you add a new custom ingredient with a custom effect/s. The effect/s will be added to the list of options inside the dropbox for choosing an effect for the ingredient."
             halign: 'left'
@@ -121,7 +113,7 @@
                 height: dp(40)
                 markup: True
                 text: '[b][size=24dp]Cancel'
-                on_release: root.toggle_page()
+                on_release: root.toggle_panel()
 
             Button:
                 size_hint_y: None
@@ -136,3 +128,91 @@
                 height: dp(40)
                 text: '[b][size=24dp]Add Ingredient'
                 on_release: root.add_ingredient()
+
+
+<ConfirmAdd>:
+    size_hint: 0.8, 0.6
+    auto_dismiss: False
+    title: 'Confirm Add'
+
+    pop_up_labels: pop_up_labels
+
+    ScrollView:
+
+        canvas.before:
+            Color:
+                rgb: 48/255, 48/255, 48/255
+
+            Rectangle:
+                size: self.size
+                pos: self.pos
+
+        MyGrid:
+            id: pop_up_labels
+            cols: 1
+
+            MyLabel:
+                text_size: root.width, None
+                text: '[b][size=26dp]Ingredient Entry'
+                halign: 'center'
+                padding: dp(20), dp(10)
+
+            MyLabel:
+                text_size: root.width, None
+                text: '[b][size=16dp][color=#E08C31]Name: [color=#31E0AC]'
+                padding: dp(20), dp(3)
+
+            MyLabel:
+                text_size: root.width, None
+                text: '[b][size=16dp][color=#E08C31]Value: [color=#31E0AC]'
+                padding: dp(20), dp(3)
+
+            MyLabel:
+                text_size: root.width, None
+                text: '[b][size=16dp][color=#E08C31]Weight: [color=#31E0AC]'
+                padding: dp(20), dp(3)
+
+            MyLabel:
+                text_size: root.width, None
+                text: '[b][size=16dp][color=#E08C31]Obtained at: [color=#31E0AC]'
+                padding: dp(20), dp(3)
+
+            MyLabel:
+                text_size: root.width, None
+                text: '[b][size=16dp][color=#E08C31]Primary Effect: [color=#31E0AC]'
+                padding: dp(20), dp(3)
+
+            MyLabel:
+                text_size: root.width, None
+                text: '[b][size=16dp][color=#E08C31]Secondary Effect: [color=#31E0AC]'
+                padding: dp(20), dp(3)
+
+            MyLabel:
+                text_size: root.width, None
+                text: '[b][size=16dp][color=#E08C31]Tertiary Effect: [color=#31E0AC]'
+                padding: dp(20), dp(3)
+
+            MyLabel:
+                text_size: root.width, None
+                text: '[b][size=16dp][color=#E08C31]Quaternary Effect: [color=#31E0AC]'
+                padding: dp(20), dp(3)
+
+            MyGrid:
+                cols: 2
+                spacing: dp(30), dp(0)
+
+                Button:
+                    size_hint_y: None
+                    height: dp(30)
+                    markup: True
+                    text: '[b][size=20dp]Cancel'
+                    on_release: root.dismiss()
+                    padding: dp(50), dp(10)
+
+                Button:
+                    size_hint_y: None
+                    height: dp(30)
+                    markup: True
+                    text: '[b][size=20dp]Confirm'
+                    on_release: print('Pressed Button "Confirm" Add Ingredient!')
+                    padding: dp(50), dp(10)

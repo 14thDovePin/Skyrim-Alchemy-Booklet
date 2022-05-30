@@ -1,10 +1,10 @@
-<CustomLabel@MyLabel>:
+<APP_Label@MyLabel>:
     text_size: self.width, None
     halign: 'center'
     padding: dp(20), dp(0)
 
 
-<ConstrainedLabel@Label>:
+<APP_ConstrainedLabel@Label>:
     size_hint: 1, None
     size: self.texture_size
     halign: 'center'
@@ -13,37 +13,26 @@
 
 
 <ApplicationInfoPanel>:
-    shown: False
-    # Other attributes are set or updated at "main.py" > "AlchemyBooklet" >
-    # "_post_update".
-
-    canvas.before:
-        Color:
-            rgb: 48/255, 48/255, 48/255
-
-        Rectangle:
-            size: self.size
-            pos: self.pos
+    ref_label: ref_label
 
     MyGrid:
-        ref_label: ref_label
 
         Label:
-        CustomLabel:
+        APP_Label:
             text: "[b][size=24dp]Application Info"
 
         Label:
-        ConstrainedLabel:
-            text_size: self.parent.ref_label.texture_size[0]*2 if self.parent.parent.parent.width >= self.parent.ref_label.texture_size[0]*2 else self.parent.parent.parent.width, None
+        APP_ConstrainedLabel:
+            text_size: root.ref_label.texture_size[0]*2 if self.parent.parent.parent.width >= root.ref_label.texture_size[0]*2 else self.parent.parent.parent.width, None
             text: "[b][size=16dp]This app was made to serve as a helpful booklet for learning the different effects of each ingredient in Skyrim's alchemy."
 
         Label:
-        ConstrainedLabel:
-            text_size: self.parent.ref_label.texture_size[0]*2 if self.parent.parent.parent.width >= self.parent.ref_label.texture_size[0]*2 else self.parent.parent.parent.width, None
+        APP_ConstrainedLabel:
+            text_size: root.ref_label.texture_size[0]*2 if self.parent.parent.parent.width >= root.ref_label.texture_size[0]*2 else self.parent.parent.parent.width, None
             text: "[b][size=16dp]The app features different tabs displaying different data relating to the currently queued ingredient. The \"Main Tab\" (First Tab) displays the current ingredient's name, weight, value, it's four effects, and a remark as to where they may be obtained from/at. The 4 other tabs display ingredients with the same effects as the current ingredient with respect to its primary, secondary, tertiary, and quaternary effects in this particular order. Pressing/selecting ingredients in the 4 other tabs will automatically parse that result for you."
 
         Label:
-        CustomLabel:
+        APP_Label:
             text: "[b][size=16dp]Developed by TherLaf"
         Label:
             id: ref_label
@@ -54,7 +43,7 @@
             padding: dp(20), dp(0)
             markup: True
             text: "[b][size=16dp]therlaf0409@gmail.com"
-        CustomLabel:
+        APP_Label:
             text: "[b][size=16dp]github.com/14thDovePin"  # Change to button reference link? Text as "Github Account | 14thDovePin"
 
         Label:
@@ -68,34 +57,4 @@
             background_down: ''
             background_color: 40/255, 41/255, 35/255, 1
             text: "[b][size=16dp]Close & Return"
-            on_release: root.toggle_page()
-
-
-# Dev Note
-
-# For some reasons overriding the attributes of the rule "CustomLabel" does not
-# seem to work. CustomLabel is a 3rd generation inherited rule as follows:
-# Label > MyLabel > CustomLabel. Therefore I had to create another inheritance
-# from Label as "ConstrainedLabel".
-
-# The logic my text constraints uses the "text_size" attribute of the "Label"
-# class. The width argument of "text_size" is passed every life cycle as
-# shown as the following:
-
-# if window.width >= label.texture_size.width*2:
-#     return label.texture_size.width*2
-# else:
-#     return window.width
-
-# It also has the following syntax:
-# text_size: value1 if condition else value2, None
-
-# 'window' is the root widget of the program.
-# 'label' is the specific label I chose to base the constraint width on. In
-# this case the Label I chose has the id "ref_label" at line 50.
-
-# Note that the "ref_label" itself does not use the rule "CustomLabel" instead
-# it uses the default kivy.uix.Label. It is because of the first reason stated
-# above that overriding does not work. Therefore I had to use Label for that.
-# That's all I wish to say for future readers to know as to why my code looks
-# funky, spaghettified, and a little confusing.
+            on_release: root.toggle_panel()

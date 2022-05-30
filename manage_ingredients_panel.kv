@@ -3,36 +3,19 @@
     markup: True
     text: "[b][size=16dp]Return.."
     padding: 0, 15
-    on_release: self.parent.manage_ingredients_panel.toggle_page()
-    # TODO: Update this system to you can ommit this comment. VVV
-    # Other attributes are set or updated at "main.py" > "AlchemyBooklet" >
-    # "_post_update".
+    on_release: self.parent.manage_ingredients_panel.toggle_panel()
 
 
-<AddIngredientButton@Button>:
+<AddCustomIngredientButton@Button>:
     shown: False  # For hiding and showing the button.
     markup: True
     text: '[b][size=16dp]Add Custom Ingredient'
     padding: 0, 10
-    on_release: self.parent.add_ingredient_panel.toggle_page()
-    # Other attributes are set or updated at "main.py" > "AlchemyBooklet" >
-    # "_post_update".
+    on_release: self.parent.add_ingredient_panel.toggle_panel()
 
 
 <ManageIngredientsPanel>:
-    shown: False   # For hiding and showing the page.
-    # Other attributes are set or updated at "main.py" > "AlchemyBooklet" >
-    # "_post_update".
-
     panel_grid: panel_grid
-
-    canvas.before:
-        Color:
-            rgb: 48/255, 48/255, 48/255
-
-        Rectangle:
-            size: self.size
-            pos: self.pos
 
     MyGrid:
         id: panel_grid
@@ -40,6 +23,5 @@
         MyLabel:
             text_size: self.width, None
             halign: 'center'
-            # padding: dp(20), dp(0)  # TODO: Ommit code?
             text: "[b][size=24dp]Ingredients Database"
             padding: 0, 10
