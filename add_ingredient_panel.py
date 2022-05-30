@@ -20,7 +20,7 @@ class AddIngredientPanel(TogglePanel):
         Update panel assets and attributes.
     return_effects
         Return a set list of all the ingredient effects from the database.
-    add_ingredient
+    prep_entry
         Check ingredient entry, add it to the database.
     """
 
@@ -31,12 +31,15 @@ class AddIngredientPanel(TogglePanel):
         ----------
         api: Database obj
             Contains data from database.
+        ingredient_entry: list
+            Contains 8 values to be appended to the database.
         UPDATE_ERROR_LABELS: bool
             If True updates the error labels of the panel.
         """
         super(AddIngredientPanel, self).__init__(**kwargs)
         # Pull data from the database.
         self.api = Database()
+        self.ingredient_entry = None
 
         # Flag for updating the panel's error labels.
         self.UPDATE_ERROR_LABELS = False
@@ -55,7 +58,13 @@ class AddIngredientPanel(TogglePanel):
         self.ids.custom_secondary_effect.text = ''
         self.ids.custom_tertiary_effect.text = ''
         self.ids.custom_quaternary_effect.text = ''
-        # TODO: Reset error labels too.
+
+        # Reset error labels.
+        if len(self.panel_grid.children) == 12:
+            self.panel_grid.remove_widget(self.panel_grid.children[1])
+            self.panel_grid.remove_widget(self.panel_grid.children[1])
+        # Set error labels update flag to False.
+        self.UPDATE_ERROR_LABELS = False
 
     def update(self, root):
         """Update panel assets and attributes.
@@ -97,29 +106,48 @@ class AddIngredientPanel(TogglePanel):
         effects.insert(0, 'Custom')
         return effects
 
-    def add_ingredient(self):
-        """Check the ingredient entry and add it to the database."""
+    def prep_entry(self):
+        """Check ingredient entry and add prep it for database append.
+
+        Note
+        ----
+        Button at "add_ingredient_panel.kv > ConfirmAdd > MyGrid > MyGrid >
+        Button.text: Cancel" MUST set attribute "ingredient_entry" to None
+        before dismissing the popup!
+
+        Button at "add_ingredient_panel.kv > ConfirmAdd > MyGrid > MyGrid >
+        Button.text: Confirm" calls the method "append_entry" before dismissing
+        the popup. Method "append_entry" already clears the "ingredient_entry"
+        attribute.
+        """
         # Check. Return if there are any errors.
         if self._check_values():
             return
 
-        # Pull ingredient entry and confirm append to database.
-        ingredient_entry = self._pop_up_confirm()[::-1]
+        # Pull ingredient entry and prep for database append.
+        entry = self._pop_up_confirm()[::-1]
 
-        # Process ingredient entry's values data type.
-        ingredient_entry = [
-            ingredient_entry[0],  # Name
-            round(float(ingredient_entry[1])),  # Value
-            float(ingredient_entry[2]),  # Weight
-            ingredient_entry[3],  # Obtained at
-            ingredient_entry[4],  # Primary Effect
-            ingredient_entry[5],  # Secondary Effect
-            ingredient_entry[6],  # Tertiary Effect
-            ingredient_entry[7],  # Quaternary Effect
+        # Process entry values data type.
+        self.ingredient_entry = [
+            entry[0],  # Name
+            round(float(entry[1])),  # Value
+            float(entry[2]),  # Weight
+            entry[3],  # Obtained at
+            entry[4],  # Primary Effect
+            entry[5],  # Secondary Effect
+            entry[6],  # Tertiary Effect
+            entry[7],  # Quaternary Effect
             ]
 
-        # Add ingredient entry to the database.
-        # TODO: Create function to append ingredient to database.
+    def append_entry(self):
+        """Append ingredient entry to the database."""
+        self.api.append_ingredient(self.ingredient_entry)
+        # Clear and reset entry.
+        self.ingredient_entry = None
+        self.reset_entries()
+        # TODO: Explicitly update the app so that after adding an ingredient.
+        # Users can search for it already and see it inside the "Manage
+        # Ingredients" panel!
 
     def _check_values(self):
         """Check all the input entry values of the panel.

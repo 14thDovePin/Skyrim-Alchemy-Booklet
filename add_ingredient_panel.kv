@@ -127,7 +127,7 @@
                 size_hint_y: None
                 height: dp(40)
                 text: '[b][size=24dp]Add Ingredient'
-                on_release: root.add_ingredient()
+                on_release: root.prep_entry()
 
 
 <ConfirmAdd>:
@@ -206,7 +206,9 @@
                     height: dp(30)
                     markup: True
                     text: '[b][size=20dp]Cancel'
-                    on_release: root.dismiss()
+                    on_release:
+                        root.parent.children[1].add_ingredient_panel.ingredient_entry = None
+                        root.dismiss()
                     padding: dp(50), dp(10)
 
                 Button:
@@ -214,5 +216,8 @@
                     height: dp(30)
                     markup: True
                     text: '[b][size=20dp]Confirm'
-                    on_release: print('Pressed Button "Confirm" Add Ingredient!')
+                    on_release:
+                        root.parent.children[1].add_ingredient_panel.append_entry()
+                        root.dismiss()
                     padding: dp(50), dp(10)
+

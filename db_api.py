@@ -6,7 +6,7 @@ class Database:
 
     Methods
     -------
-    add_ingredient
+    append_ingredient
         Add and commit a custom ingredient entry to the database.
     search_suggestions
         Return a list of search suggestions.
@@ -94,7 +94,7 @@ class Database:
             self.data_pool.append(row)
             self.ingredient_names.append(row[0])  # NAME column at index 0.
 
-    def add_ingredient(self, ingredient_entry):
+    def append_ingredient(self, ingredient_entry):
         """Add and commit a custom ingredient entry to the database.
 
         Arguments
@@ -104,9 +104,26 @@ class Database:
 
         Notes
         -----
-        TODO: Add method notes.
+        ingredient_entry should be structured as such:
+            [
+            ingredient_name, str
+            value, int
+            weight, float
+            obtained_at, str
+            primary_effect, str
+            secondary_effect, str
+            tertiary_effect, str
+            quaternary_effect, str
+            ]
+        This entry will be appended to the CUSTOM_INGREDIENTS table.
         """
-        pass
+        self.cur.execute(
+            "INSERT INTO CUSTOM_INGREDIENTS VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            ingredient_entry
+            )
+
+        # Commit entry.
+        self.con.commit()
 
     def search_suggestions(self, qeury_text):
         """Return a list of search suggestions.
