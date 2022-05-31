@@ -106,6 +106,7 @@ class ManageIngredientsPanel(TogglePanel):
         """Update ingredient name list of the panel."""
         api = Database()
         grid_layout = self.panel_grid
+        grid_layout.clear_widgets()
         color_a, color_b = '#93c47d', '#76a5af'
         for x, i in enumerate(api.ingredient_names):
             if x%2 == 0:

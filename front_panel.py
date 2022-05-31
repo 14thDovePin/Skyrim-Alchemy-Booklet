@@ -174,7 +174,7 @@ class SearchBar(GridLayout):
         """
         super(SearchBar, self).__init__(**kwargs)
         # Pull data from the database.
-        self.api = Database()
+        self.api = Database()  # TODO: pull database from root instead.
         self.retain_query = ''
 
     def search(self):

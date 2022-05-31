@@ -38,7 +38,7 @@ class AddIngredientPanel(TogglePanel):
         """
         super(AddIngredientPanel, self).__init__(**kwargs)
         # Pull data from the database.
-        self.api = Database()
+        self.api = Database()  # TODO: pull database from root instead.
         self.ingredient_entry = None
 
         # Flag for updating the panel's error labels.
@@ -142,12 +142,14 @@ class AddIngredientPanel(TogglePanel):
     def append_entry(self):
         """Append ingredient entry to the database."""
         self.api.append_ingredient(self.ingredient_entry)
+
         # Clear and reset entry.
         self.ingredient_entry = None
         self.reset_entries()
-        # TODO: Explicitly update the app so that after adding an ingredient.
-        # Users can search for it already and see it inside the "Manage
-        # Ingredients" panel!
+
+        # Update the database connection & refresh "Manage Ingredients" panel.
+        # TODO: Update database object in this line.
+        self.parent.manage_ingredients_panel.update_ingredients()
 
     def _check_values(self):
         """Check all the input entry values of the panel.
