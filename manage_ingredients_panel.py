@@ -28,7 +28,7 @@ class ManageIngredientsPanel(TogglePanel):
     right for removing the ingredient entry from the database permanently.
 
     Cannot remove any items belonging to the INGREDIENTS table of the database.
-    Refer to "db_app.py > Database > _pull_data" for more information.
+    Refer to "db_app.py > Database > pull_data" for more information.
     """
 
     def __init__(self, **kwargs):
@@ -104,7 +104,7 @@ class ManageIngredientsPanel(TogglePanel):
 
     def update_ingredients(self):
         """Update ingredient name list of the panel."""
-        api = Database()
+        api = self.parent.database
         grid_layout = self.panel_grid
         grid_layout.clear_widgets()
         color_a, color_b = '#93c47d', '#76a5af'

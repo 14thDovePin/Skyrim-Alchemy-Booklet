@@ -20,6 +20,8 @@
 
 
 <AddIngredientPanel>:
+    # api: self.parent.database
+
     panel_grid: panel_grid
 
     MyGrid:
@@ -56,22 +58,18 @@
             ADD_Spinner:
                 id: primary_effect
                 text: 'Primary Effect'
-                values: root.return_effects()
 
             ADD_Spinner:
                 id: secondary_effect
                 text: 'Secondary Effect'
-                values: root.return_effects()
 
             ADD_Spinner:
                 id: tertiary_effect
                 text: 'Tertiary Effect'
-                values: root.return_effects()
 
             ADD_Spinner:
                 id: quaternary_effect
                 text: 'Quaternary Effect'
-                values: root.return_effects()
 
             ADD_TextInput:
                 id: custom_primary_effect

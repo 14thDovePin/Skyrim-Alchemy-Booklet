@@ -173,9 +173,14 @@ class SearchBar(GridLayout):
             updating when not needed.
         """
         super(SearchBar, self).__init__(**kwargs)
-        # Pull data from the database.
-        self.api = Database()  # TODO: pull database from root instead.
+        # Run post kivy widget initialization code block.
+        Clock.schedule_once(lambda dt: self._post_update(), 1/60)
         self.retain_query = ''
+
+    def _post_update(self):
+        """Extension of the constructor with a schedule delay."""
+        # Create a reference to the root widget's database attribute.
+        self.api = self.parent.parent.parent.database
 
     def search(self):
         """Initiate search and update widgets displaying results."""

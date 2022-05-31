@@ -1,3 +1,4 @@
+from kivy.clock import Clock
 from kivy.metrics import dp
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
@@ -37,12 +38,23 @@ class AddIngredientPanel(TogglePanel):
             If True updates the error labels of the panel.
         """
         super(AddIngredientPanel, self).__init__(**kwargs)
-        # Pull data from the database.
-        self.api = Database()  # TODO: pull database from root instead.
+        # Run post kivy widget initialization code block.
+        Clock.schedule_once(lambda dt: self._post_update(), 1/60)
         self.ingredient_entry = None
 
         # Flag for updating the panel's error labels.
         self.UPDATE_ERROR_LABELS = False
+
+    def _post_update(self):
+        """Extension of the constructor with a schedule delay."""
+        # Create a reference to the root widget's database attribute.
+        self.api = self.parent.database
+
+        # TODO: Separate code block into its own method for updating the
+        # Spinner widgets values everytime an ingredient is added to the db.
+        # Add values to the spinner widgets.
+        for i in self.children[0].children[-7].children[4:]:
+            i.values = self.return_effects()
 
     def reset_entries(self):
         """Reset all the panel entries manually."""
@@ -148,7 +160,7 @@ class AddIngredientPanel(TogglePanel):
         self.reset_entries()
 
         # Update the database connection & refresh "Manage Ingredients" panel.
-        # TODO: Update database object in this line.
+        self.api.pull_data()
         self.parent.manage_ingredients_panel.update_ingredients()
 
     def _check_values(self):

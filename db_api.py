@@ -33,9 +33,9 @@ class Database:
         self.cur = self.con.cursor()
         self.search_key = None
 
-        self._pull_data()
+        self.pull_data()
 
-    def _pull_data(self):
+    def pull_data(self):
         """Extension of the constructor. Pull data from the database.
 
         Class Attributes
