@@ -124,19 +124,23 @@ class FrontPanel(TogglePanel):
         self.pos = root.pos
         self.size = root.size
 
-        # Update size & pos of "root.kv > SearchSuggestionsBox".
+        # Prep & update size & "front_panel.kv > SearchSuggestionsBox".
         root.search_suggestions_box.width = \
         self.search_bar.search_text_input.width
+        # Height from the bottom of the window to the bottom of the text input.
         set_height = root.height - abs(root.height - \
         self.search_bar.search_text_input.y)
+        # Height from minimum_height attribute of search suggestions box.
         min_height = root.search_suggestions_box.suggestions_box.minimum_height
-        root.search_suggestions_box.top = self.search_bar.search_text_input.y
 
-        # Set correct height of SearchSuggestionsBox.
+        # Set height of search suggestions box.
         if  min_height < set_height:
             root.search_suggestions_box.height = min_height
         else:
             root.search_suggestions_box.height = set_height
+
+        # Set pos of search suggestions box.
+        root.search_suggestions_box.top = self.search_bar.search_text_input.y
 
         # Update pos of "root.kv > MenuButton".
         root.menu_button.top = root.top
