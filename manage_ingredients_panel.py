@@ -46,18 +46,6 @@ class ManageIngredientsPanel(TogglePanel):
         else:
             self.shown = True
 
-        # Toggle "manage_ingredients_panel.kv > ReturnButton".
-        if self.parent.return_button.shown:
-            self.parent.return_button.shown = False
-        else:
-            self.parent.return_button.shown = True
-
-        # Toggle "manage_ingredients_panel.kv > AddCustomIngredientButton".
-        if self.parent.add_custom_ingredient_button.shown:
-            self.parent.add_custom_ingredient_button.shown = False
-        else:
-            self.parent.add_custom_ingredient_button.shown = True
-
     def update(self, root):
         """Update panel assets and attributes.
 
@@ -67,9 +55,7 @@ class ManageIngredientsPanel(TogglePanel):
             The root widget of the application.
         """
         # Update size and pos attribute.
-        self.width = root.width
-        self.height = root.height - \
-        root.add_custom_ingredient_button.height
+        self.size = root.size
         self.x = root.x
 
         # Show or hide the panel.
@@ -78,29 +64,9 @@ class ManageIngredientsPanel(TogglePanel):
         else:
             self.top = root.y - 10
 
-        # Update size & pos of "manage_ingredients_panel.kv > ReturnButton".
-        root.return_button.width = \
-        self.panel_grid.width*1/6
-        root.return_button.height = \
-        root.return_button.texture_size[1]
-        root.return_button.right = root.right
-        # Show or hide ReturnButton.
-        if root.return_button.shown:
-            root.return_button.top = root.top
-        else:
-            root.return_button.top = root.y - 10
-
-        # Update size & pos of "manage_ingredients_panel.kv >
-        # AddCustomIngredientButton".
-        root.add_custom_ingredient_button.width = root.width
-        root.add_custom_ingredient_button.height = \
-        root.add_custom_ingredient_button.texture_size[1]
-        root.add_custom_ingredient_button.x = root.x
-        # Show or hide ReturnButton.
-        if root.add_custom_ingredient_button.shown:
-            root.add_custom_ingredient_button.y = root.y
-        else:
-            root.add_custom_ingredient_button.top = root.y - 10
+        # Update height of "Add Custom Ingredient" button.
+        self.add_custom_ingredient_button.height = \
+        self.add_custom_ingredient_button.texture_size[1]
 
     def update_ingredients(self):
         """Update ingredient name list of the panel."""

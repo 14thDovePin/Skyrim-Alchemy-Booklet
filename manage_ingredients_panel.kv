@@ -1,27 +1,38 @@
-<ReturnButton@Button>:
-    shown: False  # For hiding and showing the button.
-    markup: True
-    text: "[b][size=16dp]Return.."
-    padding: 0, 15
-    on_release: self.parent.manage_ingredients_panel.toggle_panel()
-
-
-<AddCustomIngredientButton@Button>:
-    shown: False  # For hiding and showing the button.
-    markup: True
-    text: '[b][size=16dp]Add Custom Ingredient'
-    padding: 0, 10
-    on_release: self.parent.add_ingredient_panel.toggle_panel()
-
-
 <ManageIngredientsPanel>:
+    do_scroll_y: False
+
     panel_grid: panel_grid
+    add_custom_ingredient_button: add_custom_ingredient_button
 
     MyGrid:
-        id: panel_grid
 
-        MyLabel:
-            text_size: self.width, None
-            halign: 'center'
-            text: "[b][size=24dp]Ingredients Database"
+        MyGrid:
+            cols: 2
+
+            MyLabel:
+                text_size: self.width, None
+                halign: 'center'
+                text: "[b][size=24dp]Ingredients Database"
+                padding: 0, 10
+
+            Button:
+                size_hint_x: 0.12
+                markup: True
+                text: "[b][size=20dp]Return"
+                padding: 0, 15
+                on_release: root.parent.manage_ingredients_panel.toggle_panel()
+
+        ScrollView:
+            size_hint_y: None
+            height: root.parent.height - (self.parent.children[0].height + self.parent.children[-1].height)
+
+            MyGrid:
+                id: panel_grid
+
+        Button:
+            id: add_custom_ingredient_button
+            size_hint_y: None
+            markup: True
+            text: '[b][size=20dp]Add Custom Ingredient'
             padding: 0, 10
+            on_release: root.parent.add_ingredient_panel.toggle_panel()
