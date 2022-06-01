@@ -49,10 +49,11 @@ class AddIngredientPanel(TogglePanel):
         """Extension of the constructor with a schedule delay."""
         # Create a reference to the root widget's database attribute.
         self.api = self.parent.database
+        self.update_spinners()
 
-        # TODO: Separate code block into its own method for updating the
-        # Spinner widgets values everytime an ingredient is added to the db.
-        # Add values to the spinner widgets.
+    def update_spinners(self):
+        """Update/Add values to the spinner widgets of the panel."""
+        # Update/Add values to the 'values' attribute of the spinner widgets.
         for i in self.children[0].children[-7].children[4:]:
             i.values = self.return_effects()
 
@@ -162,6 +163,8 @@ class AddIngredientPanel(TogglePanel):
         # Update the database connection & refresh "Manage Ingredients" panel.
         self.api.pull_data()
         self.parent.manage_ingredients_panel.update_ingredients()
+        # Update spinners of "Add Ingredient" panel.
+        self.update_spinners()
 
     def _check_values(self):
         """Check all the input entry values of the panel.
