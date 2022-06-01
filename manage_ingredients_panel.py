@@ -1,8 +1,8 @@
 from kivy.clock import Clock
-from front_panel import ButtonLabel
 
 
 from db_api import Database
+from front_panel import ButtonLabel
 from templates import TogglePanel
 
 
@@ -79,6 +79,20 @@ class ManageIngredientsPanel(TogglePanel):
                 self._add_ingredient(grid_layout, color_a, i)
             else:
                 self._add_ingredient(grid_layout, color_b, i)
+
+        # Add a another label for the total number of ingredients.
+        ingredients_total_text = \
+        '[color=#86A3C3][b][size=20dp]Total Ingredients: ' + \
+        f'[{str(len(api.ingredient_names))}]'
+        grid_layout.add_widget(
+            ButtonLabel(
+                size_hint = [1, None],
+                text = ingredients_total_text,
+                padding = [5, 5],
+                background_color = (64/255, 64/255, 64/255, 1),
+                halign = 'center'
+                )
+            )
 
     def _add_ingredient(self, base_widget, color, button_text):
         """Add a ButtonLabel rule with a remove Button to a widget.

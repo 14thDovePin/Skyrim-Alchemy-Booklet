@@ -284,7 +284,7 @@ class AddIngredientPanel(TogglePanel):
                     size_hint_y = None,
                     height = dp(40),
                     markup = True,
-                    text = '[b][size=24dp]Adding Failed',
+                    text = '[b][size=24dp][color=#FFA500]Adding Failed',
                     halign = 'left',
                     padding = [dp(20), dp(0)]
                     )
