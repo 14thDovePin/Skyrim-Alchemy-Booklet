@@ -1,4 +1,10 @@
+from kivy.uix.gridlayout import GridLayout
 from kivy.uix.scrollview import ScrollView
+
+
+class MyGrid(GridLayout):
+    """A GridLayout with tailored presets."""
+    pass
 
 
 class TogglePanel(ScrollView):

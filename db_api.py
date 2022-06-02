@@ -4,6 +4,18 @@ import sqlite3
 class Database:
     """Manage data and communication with the database.
 
+    Class Attributes
+    ----------------
+    search_key: string
+        The key used to return the correct set of data.
+    data_pool: list
+        Contains all the items from the 2 tables of the database, with each
+        item structured as a list.
+    ingredient_names: list
+        Contains all the NAME values of the data_pool attribute.
+    custom_ingredient_naems: list
+        Contains all the NAME values of the CUSTOM_INGREDIENTS table.
+
     Methods
     -------
     append_ingredient
@@ -21,13 +33,7 @@ class Database:
     """
 
     def __init__(self):
-        """Pull data in from the database and make it its own attribute.
-
-        Class Attributes
-        ----------------
-        search_key: string
-            The key used to return the correct set of data.
-        """
+        """Pull data in from the database and make it its own attribute."""
         # Create a connection and cursor to the database.
         self.con = sqlite3.connect("skyrim_ingredients.db")
         self.cur = self.con.cursor()
@@ -37,14 +43,6 @@ class Database:
 
     def pull_data(self):
         """Extension of the constructor. Pull data from the database.
-
-        Class Attributes
-        ----------------
-        data_pool: list
-            Contains all the items from the 2 tables of the database, with
-            each item structured as a list.
-        ingredient_names: list
-            Contains all the NAME values of the data_pool attribute.
 
         Notes
         -----
@@ -71,6 +69,7 @@ class Database:
         """
         self.data_pool = []
         self.ingredient_names = []
+        self.custom_ingredient_names = []
 
         # Pull data from the INGREDIENTS table of the database.
         for row in self.cur.execute("SELECT * FROM INGREDIENTS"):
@@ -92,7 +91,8 @@ class Database:
                     row.insert(index, str(item))
 
             self.data_pool.append(row)
-            self.ingredient_names.append(row[0])  # NAME column at index 0.
+            # NAME column at index 0.
+            self.custom_ingredient_names.append(row[0])
 
     def append_ingredient(self, ingredient_entry):
         """Add and commit a custom ingredient entry to the database.
@@ -164,6 +164,7 @@ class Database:
         The search_key is used in the class' "details", "effects", and "tabs"
         method to set the correct data to be returned when called.
         """
+        # FIXME: Does not work with custom ingredients!
         for x, item in enumerate(self.ingredient_names):
             if qeury_text.lower().replace(' ', '') == \
             item.lower().replace(' ', ''):

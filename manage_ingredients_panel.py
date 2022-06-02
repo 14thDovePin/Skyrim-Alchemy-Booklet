@@ -1,9 +1,11 @@
 from kivy.clock import Clock
+from kivy.metrics import dp
+from kivy.uix.button import Button
 
 
 from db_api import Database
 from front_panel import ButtonLabel
-from templates import TogglePanel
+from templates import MyGrid, TogglePanel
 
 
 class ManageIngredientsPanel(TogglePanel):
@@ -74,12 +76,22 @@ class ManageIngredientsPanel(TogglePanel):
         grid_layout = self.panel_grid
         grid_layout.clear_widgets()
         color_a, color_b = '#93c47d', '#76a5af'
+
+        # Add ingredient names to database list.
         for x, i in enumerate(api.ingredient_names):
             if x%2 == 0:
                 self._add_ingredient(grid_layout, color_a, i)
             else:
                 self._add_ingredient(grid_layout, color_b, i)
 
+        # Add custom ingredient names to database list. Reversed color!
+        for x, i in enumerate(api.custom_ingredient_names):
+            if x%2 == 0:
+                self._add_custom_ingredient(grid_layout, color_b, i)
+            else:
+                self._add_custom_ingredient(grid_layout, color_a, i)
+
+        # FIXME: Does not work with custom ingredients.
         # Add a another label for the total number of ingredients.
         ingredients_total_text = \
         '[color=#86A3C3][b][size=20dp]Total Ingredients: ' + \
@@ -95,6 +107,35 @@ class ManageIngredientsPanel(TogglePanel):
             )
 
     def _add_ingredient(self, base_widget, color, button_text):
+        """Add a ButtonLabel rule to a widget.
+
+        Arguments
+        ---------
+        base_widget: kivy object
+            The widget that is used to add the button wigdet to.
+        color: string
+            The hex color to be used in the button's background.
+        text: string
+            The text that will replace the button's text attribute.
+
+        Note
+        ----
+        ButtonLabel is a Button diguised as a Label. In this case here there is
+        also another button 1/5th of its width to the right, it is for removing
+        the custom added ingredient from the database permanently.
+        """
+        text = f'[color={color.upper()}][b][size=20dp]'+button_text[:]
+        base_widget.add_widget(
+            ButtonLabel(
+                size_hint = [1, None],
+                text = text,
+                padding = [5, 5],
+                background_color = (64/255, 64/255, 64/255, 1),
+                on_release = lambda ins: self._search(text)
+                )
+            )
+
+    def _add_custom_ingredient(self, base_widget, color, button_text):
         """Add a ButtonLabel rule with a remove Button to a widget.
 
         Arguments
@@ -112,10 +153,13 @@ class ManageIngredientsPanel(TogglePanel):
         also another button 1/5th of its width to the right, it is for removing
         the custom added ingredient from the database permanently.
         """
-        # TODO: Add button option to remove CUSTOM ingredient!
         text = f'[color={color.upper()}][b][size=20dp]'+button_text[:]
-        base_widget.add_widget(
-            ButtonLabel(
+
+        # Create GridLayout.
+        entry_widget = MyGrid(cols = 2)
+
+        # Add Ingredient ButtonLabel.
+        entry_widget.add_widget(ButtonLabel(
                 size_hint = [1, None],
                 text = text,
                 padding = [5, 5],
@@ -123,6 +167,20 @@ class ManageIngredientsPanel(TogglePanel):
                 on_release = lambda ins: self._search(text)
                 )
             )
+
+        # Add Remove Entry Button.
+        entry_widget.add_widget(
+            Button(
+                size_hint_x = None,
+                width = dp(140),  # Manually setting width is easier.
+                markup = True,
+                text = '[b][size=18dp]Remove Entry'
+                )
+
+            )
+
+        # Append Grid to Panel.
+        base_widget.add_widget(entry_widget)
 
     def _search(self, text):
         """Toggle panel and search the ingredient.
