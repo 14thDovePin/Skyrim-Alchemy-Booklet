@@ -91,11 +91,10 @@ class ManageIngredientsPanel(TogglePanel):
             else:
                 self._add_custom_ingredient(grid_layout, color_a, i)
 
-        # FIXME: Does not work with custom ingredients.
         # Add a another label for the total number of ingredients.
         ingredients_total_text = \
         '[color=#86A3C3][b][size=20dp]Total Ingredients: ' + \
-        f'[{str(len(api.ingredient_names))}]'
+        f'[{str(len(api.ingredient_names)+len(api.custom_ingredient_names))}]'
         grid_layout.add_widget(
             ButtonLabel(
                 size_hint = [1, None],

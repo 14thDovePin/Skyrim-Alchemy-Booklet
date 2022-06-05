@@ -32,7 +32,6 @@ class MenuButton(Button):
         context menu -> "front_panel.py > ContextMenu"
         """
 
-        # TODO: Update context menu logic?
         # Check flag. Set default width of context menu buttons.
         if self.parent.context_menu.SETUP_WIDTH:
             children = [i for i in \

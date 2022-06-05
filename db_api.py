@@ -13,8 +13,10 @@ class Database:
         item structured as a list.
     ingredient_names: list
         Contains all the NAME values of the data_pool attribute.
-    custom_ingredient_naems: list
+    custom_ingredient_names: list
         Contains all the NAME values of the CUSTOM_INGREDIENTS table.
+    ingredient_names_all: list
+        Merged ingredient_names and custom_ingredient_names
 
     Methods
     -------
@@ -94,6 +96,10 @@ class Database:
             # NAME column at index 0.
             self.custom_ingredient_names.append(row[0])
 
+        # Create a merged list of ingredient names.
+        self.ingredient_names_all = \
+        self.ingredient_names + self.custom_ingredient_names
+
     def append_ingredient(self, ingredient_entry):
         """Add and commit a custom ingredient entry to the database.
 
@@ -145,7 +151,7 @@ class Database:
         qtext = qeury_text.lower().replace(' ', '')
 
         if qtext:
-            for item in self.ingredient_names:
+            for item in self.ingredient_names_all:
                 if qtext in item.lower().replace(' ', ''):
                     suggestions.append(item)
 
@@ -164,8 +170,7 @@ class Database:
         The search_key is used in the class' "details", "effects", and "tabs"
         method to set the correct data to be returned when called.
         """
-        # FIXME: Does not work with custom ingredients!
-        for x, item in enumerate(self.ingredient_names):
+        for x, item in enumerate(self.ingredient_names_all):
             if qeury_text.lower().replace(' ', '') == \
             item.lower().replace(' ', ''):
                 self.search_key = x
@@ -211,17 +216,27 @@ class Database:
         primary, secondary, tertiary, quaternary = [], [], [], []
 
         for x, y in enumerate(self.data_pool):
-            for i in y:
-                if i == self.data_pool[self.search_key][4]:
+            # Compare the four effects of the search_key attri to each item.
+            ingredient_effects = ()
+            for i in y[4:]: # Loop through each effects.
+                # Check if any effect matches searched ingredient's.
+                # If matched append its name to their respective variable.
+                if i == self.data_pool[self.search_key][4]:  # Primary
                     primary.append(self.data_pool[x][0])
-                if i == self.data_pool[self.search_key][5]:
+                if i == self.data_pool[self.search_key][5]:  # Secondary
                     secondary.append(self.data_pool[x][0])
-                if i == self.data_pool[self.search_key][6]:
+                if i == self.data_pool[self.search_key][6]:  # Tertiary
                     tertiary.append(self.data_pool[x][0])
-                if i == self.data_pool[self.search_key][7]:
+                if i == self.data_pool[self.search_key][7]:  # Quaternary
                     quaternary.append(self.data_pool[x][0])
 
-        return [primary, secondary, tertiary, quaternary]
+        # Return the set list. This prevents duplicates.
+        return [
+            list(set(primary)),
+            list(set(secondary)),
+            list(set(tertiary)),
+            list(set(quaternary))
+            ]
 
     def tabs(self):
         """Return a list of tab names.
