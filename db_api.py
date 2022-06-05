@@ -123,6 +123,10 @@ class Database:
             ]
         This entry will be appended to the CUSTOM_INGREDIENTS table.
         """
+        # For spotting a bug that has a small chance to happen.
+        # This might give me a clue as to where the problem lies.
+        # Then again i suspect it to be in the database itself.
+        print(ingredient_entry)
         self.cur.execute(
             "INSERT INTO CUSTOM_INGREDIENTS VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
             ingredient_entry
@@ -130,6 +134,35 @@ class Database:
 
         # Commit entry.
         self.con.commit()
+
+    def delete_ingredient(self, ingredient_name):
+        """Remove and commit a custom ingredient entry from the database.
+
+        Arguments
+        ---------
+        ingredient_name: string
+            The ingredient name that will be used to remove an ingredient from
+            the database.
+        """
+        # Check & return ingredient entry from the database.
+        cmd= f'DELETE FROM CUSTOM_INGREDIENTS WHERE NAME = "{ingredient_name}"'
+        self.cur.execute(cmd)
+
+        # Commit entry.
+        self.con.commit()
+
+    def refresh_program(self, root):
+        """Update widgets relying on data from the database.
+
+        Arguments
+        root: Kivy obj
+            The root widget of the application.
+        """
+        # Update the database connection & refresh "Manage Ingredients" panel.
+        self.pull_data()
+        root.manage_ingredients_panel.update_ingredients()
+        # Update spinners of "Add Ingredient" panel.
+        root.add_ingredient_panel.update_spinners()
 
     def search_suggestions(self, qeury_text):
         """Return a list of search suggestions.

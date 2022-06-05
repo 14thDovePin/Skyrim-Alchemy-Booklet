@@ -160,11 +160,8 @@ class AddIngredientPanel(TogglePanel):
         self.ingredient_entry = None
         self.reset_entries()
 
-        # Update the database connection & refresh "Manage Ingredients" panel.
-        self.api.pull_data()
-        self.parent.manage_ingredients_panel.update_ingredients()
-        # Update spinners of "Add Ingredient" panel.
-        self.update_spinners()
+        # Refresh program.
+        self.api.refresh_program(self.parent)
 
     def _check_values(self):
         """Check all the input entry values of the panel.
